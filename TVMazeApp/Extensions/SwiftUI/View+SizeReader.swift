@@ -60,11 +60,11 @@ fileprivate struct RectPreferenceKey: PreferenceKey {
 
 extension View {
     
-    func readRect(into rectBinding: Binding<CGRect>) -> some View {
+    func readRect(into rectBinding: Binding<CGRect>, _ rectModifier: ((CGRect) -> CGRect)? = nil) -> some View {
         self.background {
             GeometryReader { proxy in
                 Color.clear
-                    .preference(key: RectPreferenceKey.self, value: proxy.frame(in: .global))
+                    .preference(key: RectPreferenceKey.self, value: rectModifier?(proxy.frame(in: .global)) ?? proxy.frame(in: .global))
             }
         }
         .onPreferenceChange(RectPreferenceKey.self) { rect in

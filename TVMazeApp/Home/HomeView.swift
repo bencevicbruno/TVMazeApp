@@ -52,6 +52,9 @@ struct HomeView: View {
     @ObservedObject var favoritesService = FavoritesService.instance
     
     @State private var recommendedRects = [Int: CGRect]()
+    @State private var scheduledRects = [Int: CGRect]()
+    
+    @State private var animationOriginRect: CGRect?
     @State private var scrollViewOffset: CGPoint = .zero
     
     var body: some View {
@@ -65,7 +68,7 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
             }
             .padding(.top, 2 * 8 + titleFontSize)
-            .presentShowDetails($viewModel.showPrimaryInfo, fromRect: recommendedRects[viewModel.showPrimaryInfo?.id ?? 0]?.reducingHeight(RecommendedShowCard.height - RecommendedShowCard.imageHeight) ?? .zero)
+            .presentShowDetails($viewModel.showPrimaryInfo, fromRect: animationOriginRect ?? .zero)
             
             VStack(spacing: 0) {
                 title
@@ -170,9 +173,12 @@ private extension HomeView {
                         ForEach(viewModel.recommendedShows) { show in
                             RecommendedShowCard(model: show, isFavorite: favoritesService.binding(for: show.id))
                                 .onTapGesture {
+                                    self.animationOriginRect = recommendedRects[show.id]
                                     viewModel.showPrimaryInfo = .init(from: show)
                                 }
-                                .readRect(into: rectBinding(id: show.id))
+                                .readRect(into: recommendedRectBinding(id: show.id)) { rect in
+                                    rect.reducingHeight(RecommendedShowCard.height - RecommendedShowCard.imageHeight)
+                                }
                         }
                     }
                     .padding(.horizontal, 16)
@@ -182,7 +188,7 @@ private extension HomeView {
         }
     }
     
-    func rectBinding(id: Int) -> Binding<CGRect> {
+    func recommendedRectBinding(id: Int) -> Binding<CGRect> {
         .init(get: {
             recommendedRects[id] ?? .zero
         }, set: { value in
@@ -212,12 +218,27 @@ private extension HomeView {
                 VStack(spacing: 16) {
                     ForEach(viewModel.scheduledShows) { show in
                         ScheduledShowCard(model: show)
+                            .onTapGesture {
+                                self.animationOriginRect = scheduledRects[show.id]
+                                viewModel.showPrimaryInfo = .init(from: show)
+                            }
+                            .readRect(into: scheduledRectBinding(id: show.id)) { rect in
+                                rect.reducingWidth(ScheduledShowCard.width - ScheduledShowCard.height)
+                            }
                     }
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, UIScreen.unsafeBottomPadding / 2)
             }
         }
+    }
+    
+    func scheduledRectBinding(id: Int) -> Binding<CGRect> {
+        .init(get: {
+            scheduledRects[id] ?? .zero
+        }, set: { value in
+            scheduledRects[id] = value
+        })
     }
 }
 
