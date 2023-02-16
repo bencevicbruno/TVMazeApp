@@ -19,6 +19,37 @@ struct CastMemberModel: Identifiable, Hashable {
     }
 }
 
+struct OffsetToRectModifier: ViewModifier {
+    
+    private let rect: CGRect?
+    
+    @State private var currentRect: CGRect = .zero
+    
+    init(rect: CGRect?) {
+        self.rect = rect
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .offset(x: rect == nil ? 0 : (rect!.minX - currentRect.minX),
+                    y: rect == nil ? 0 : (rect!.minY - currentRect.minY))
+            .readRect(into: $currentRect)
+            .onAppear {
+                print("x offset \(rect == nil ? 0 : (rect!.minX - currentRect.minX))")
+                print("y offset \(rect == nil ? 0 : (rect!.minY - currentRect.minY))")
+                
+                
+            }
+    }
+}
+
+extension View {
+    
+    func offset(to rect: CGRect?) -> some View {
+        self.modifier(OffsetToRectModifier(rect: rect))
+    }
+}
+
 struct AnimatedShowDetailsView: View {
     
     @ObservedObject var favoritesService = FavoritesService.instance
@@ -40,31 +71,81 @@ struct AnimatedShowDetailsView: View {
         ZStack {
             backgroundImage
             
-            content
-
-            detailsOverlay
-        }
-        .background(Color.tvMazeBlack.opacity(didAppear ? 1 : 0))
-        .overlay(alignment: .topLeading) {
-            FavoriteButton(favoritesService.binding(for: model.id))
-                .offset(x: didAppear ? (UIScreen.width - 16 - FavoriteButton.defaultIconSize ) : originFrame.minX, y: didAppear ? (UIScreen.unsafeTopPadding + 0) : originFrame.minY)
+            showDetails
             
-            .edgesIgnoringSafeArea(.top)
+            navigationBar
         }
+        .edgesIgnoringSafeArea(.all)
+        .frame(width: UIScreen.width)
+        .background(Color.tvMazeBlack.opacity(didAppear ? 1 : 0))
         .onAppear {
             withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
                 didAppear = true
             }
         }
-        .frame(width: UIScreen.width)
-//        .frame(width: UIScreen.width, height: UIScreen.height, alignment: .topLeading)
-//        .clipped()
     }
     
     static let imageHeight = UIScreen.height * 2 / 3
 }
 
 private extension AnimatedShowDetailsView {
+    
+    // MARK: Navigation Bar
+    
+    var navigationBar: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 0) {
+                Rectangle()
+                    .fill(.black.opacity(0.4))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: UIScreen.unsafeTopPadding)
+                
+                Color.black.opacity(0.4)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .overlay {
+                        HStack(spacing: 0) {
+                            Image("icon_back")
+                                .resizable()
+                                .renderingMode(.template)
+                                .scaledToFit()
+                                .foregroundColor(.white)
+                                .frameAsIcon()
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
+                                        didAppear = false
+                                    }
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + HomeView.transitionDuration) {
+                                        isVisible = false
+                                    }
+                                }
+                            
+                            Spacer()
+                            
+                            FavoriteButton(favoritesService.binding(for: model.id))
+                                .offset(to: didAppear ? nil : originFrame)
+                                .offset(y: didAppear ? 0 : navigationBarSize.height)
+                        }
+                        .padding(.horizontal, 24)
+                    }
+                
+                LinearGradient(colors: [.black.opacity(0.4), .clear], startPoint: .top, endPoint: .bottom)
+                    .frame(height: 40)
+                
+                Spacer()
+            }
+            .frame(width: UIScreen.width, height: Self.imageHeight)
+            .edgesIgnoringSafeArea(.all)
+            
+            Spacer()
+        }
+        .readSize(into: $navigationBarSize)
+        .offset(y: didAppear ? 0 : -navigationBarSize.height)
+    }
+    
+    // MARK: Background Image
     
     var backgroundImage: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -82,8 +163,7 @@ private extension AnimatedShowDetailsView {
                                 .padding(.top, 16)
                         }
                     }
-                    .padding(.leading, didAppear ? 0 : originFrame.minX)
-                    .padding(.top, didAppear ? 0 : originFrame.minY)
+                    .offset(to: didAppear ? nil : originFrame)
                 
                 Spacer()
             }
@@ -94,7 +174,9 @@ private extension AnimatedShowDetailsView {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
     
-    var content: some View {
+    // MARK: Show Details
+    
+    var showDetails: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ZStack {
                 VStack(spacing: 0) {
@@ -111,13 +193,13 @@ private extension AnimatedShowDetailsView {
                 VStack(spacing: 0) {
                     Color.clear
                         .frame(height: Self.imageHeight - .textSizeHeader1)
-                       
-                    Text("The placeholder panda is eating all the bamboo again.")
+                    
+                    Text(verbatim: model.title)
                         .style(.header1, color: .white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                     
-                    Text("What are we gonna do? What are we gonna do? What are we gonna do? What are we gonna do? What are we gonna do? What are we gonna do?")
+                    Text(verbatim: model.description)
                         .style(.bodyDefault, color: .white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
@@ -193,64 +275,14 @@ private extension AnimatedShowDetailsView {
             .padding(.top, 44)
         }
     }
-    
-    var detailsOverlay: some View {
-        VStack(spacing: 0) {
-            VStack(spacing: 0) {
-                Rectangle()
-                    .fill(.black.opacity(0.4))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: UIScreen.unsafeTopPadding)
-                
-                Color.black.opacity(0.4)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .overlay {
-                        HStack(spacing: 0) {
-                            Image("icon_back")
-                                .resizable()
-                                .renderingMode(.template)
-                                .scaledToFit()
-                                .foregroundColor(.white)
-                                .frameAsIcon()
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
-                                        didAppear = false
-                                    }
-                                    
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + HomeView.transitionDuration) {
-                                        isVisible = false
-                                    }
-                                }
-                            
-                            Spacer()
-                            
-                            Color.clear
-                                .frame(size: 40)
-                        }
-                        .padding(.horizontal, 16)
-                    }
-                
-                LinearGradient(colors: [.black.opacity(0.4), .clear], startPoint: .top, endPoint: .bottom)
-                    .frame(height: 40)
-                
-                Spacer()
-            }
-            .frame(width: UIScreen.width, height: Self.imageHeight)
-            .edgesIgnoringSafeArea(.all)
-            
-            Spacer()
-        }
-        .readSize(into: $navigationBarSize)
-        .offset(y: didAppear ? 0 : -navigationBarSize.height)
-    }
 }
 
 struct AnimatedShowDetailsView_Previews: PreviewProvider {
     
     static var previews: some View {
-        AnimatedShowDetailsView(model: .init(from: RecommendedShowModel.sample()), isVisible: .constant(true), originFrame: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
-            .background(.white)
+        AnimatedShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
+                                isVisible: .constant(true),
+                                originFrame: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
+        .background(.white)
     }
 }

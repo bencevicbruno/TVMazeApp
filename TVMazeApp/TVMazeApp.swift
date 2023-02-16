@@ -31,6 +31,10 @@ struct TVMazeApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
+//            AnimatedShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
+//                                    isVisible: .constant(true),
+//                                    originFrame: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
+//                .background(.white)
 //            TabView(selection: $currentTab) {
 //                HomeView()
 //                    .tag(MainTab.home)

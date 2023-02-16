@@ -98,7 +98,7 @@ struct HomeView: View {
     static let refreshThreshold = Self.scrollViewFirstThreshold / 3
     static let refreshMinSize = CGFloat.textSizeSmallLabel
     
-    static let transitionDuration: CGFloat = 1.0
+    static let transitionDuration: CGFloat = 2
 }
 
 private extension HomeView {
