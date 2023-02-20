@@ -9,6 +9,8 @@ import SwiftUI
 
 struct RecommendedShowCard: View {
     
+    @ObservedObject var favoritesService = FavoritesService.instance
+    
     let model: RecommendedShowModel
     @Binding var isFavorite: Bool
     
@@ -54,6 +56,7 @@ struct RecommendedShowCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(alignment: .topLeading) {
             FavoriteButton($isFavorite)
+                .id(favoritesService.refreshToken ? 0 : 1)
         }
     }
     

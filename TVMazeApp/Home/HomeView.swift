@@ -151,12 +151,12 @@ private extension HomeView {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .frame(maxWidth: .infinity)
-                    .frame(height: RecommendedShowCard.height / 2)
+                    .frame(height: RecommendedShowCard.height)
             } else if viewModel.recommendedShows.isEmpty {
                 Text(verbatim: "No recommended shows found.")
                     .style(.boldBodyDefault, color: .white, alignment: .center)
                     .frame(maxWidth: .infinity)
-                    .frame(height: RecommendedShowCard.height / 2)
+                    .frame(height: RecommendedShowCard.height)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
@@ -178,7 +178,6 @@ private extension HomeView {
                     }
                     .padding(.horizontal, 16)
                 }
-                .id(favoritesService.refreshToken ? 0 : 1)
             }
         }
     }
