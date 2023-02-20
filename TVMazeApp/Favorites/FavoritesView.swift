@@ -27,7 +27,7 @@ struct FavoritesView: View {
                     Color.clear
                 } else {
                     OffsettableScrollView(axes: .vertical, showsIndicator: false, offset: $scrollViewOffset) {
-                        mockedFavorites
+                        favoritesGrid
                     }
                 }
             }
@@ -138,19 +138,14 @@ private extension FavoritesView {
     static let refreshFirstThreshold: CGFloat = .textSizeCaption + 2 * 8 + 16
     static let refreshSecondThreshold: CGFloat = .textSizeBody + 2 * 8 + 16
     
-    var mockedFavorites: some View {
-        VStack(spacing: 16) {
+    var favoritesGrid: some View {
+        LazyVGrid(columns: [.init(.flexible(), spacing: 16), .init(.flexible())], alignment: .center, spacing: 16) {
             ForEach(viewModel.favoriteShows, id: \.self) { show in
-                HStack(spacing: 16) {
-                    FavoriteShowCard(model: show, isFavorite: favoritesService.binding(for: show.id))
-                    
-                    Color.white
-                        .frame(width: FavoriteShowCard.width, height: FavoriteShowCard.height)
-                }
+                FavoriteShowCard(model: show, isFavorite: favoritesService.binding(for: show.id))
             }
         }
+        .frame(width: UIScreen.width - 2 * 16)
         .padding(.horizontal, 16)
-        .id(favoritesService.refreshToken ? 0 : 1)
     }
 }
 

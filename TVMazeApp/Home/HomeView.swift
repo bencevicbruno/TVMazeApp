@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     
-    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, imageOrigin: CGRect, favoriteButtonOrigin: CGRect?) -> some View {
+    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, imageOrigin: CGRect? = nil) -> some View {
         ZStack {
             self
             
@@ -24,8 +24,8 @@ extension View {
                                 binding.wrappedValue = nil
                             }
                         }),
-                    imageOrigin: imageOrigin,
-                    favoriteButtonOrigin: favoriteButtonOrigin)
+                    imageOrigin: imageOrigin ?? .zero,
+                    favoriteButtonOrigin: nil)
             }
         }
     }
@@ -38,13 +38,9 @@ struct HomeView: View {
     @ObservedObject var favoritesService = FavoritesService.instance
     @ObservedObject var mainViewModel = MainViewModel.instance
     
-    @State private var recommendedRects = [Int: CGRect]()
-    @State private var scheduledRects = [Int: CGRect]()
-    
-    @State private var animationImageOrigin: CGRect?
-    @State private var animationFavoriteButtonOrigin: CGRect?
-    
     @State private var scrollViewOffset: CGPoint = .zero
+    @State private var animatableRects: [AnimatablePoster: CGRect] = [:]
+    @State private var animationImageOrigin: CGRect?
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -58,8 +54,7 @@ struct HomeView: View {
             }
             .padding(.top, 2 * 8 + titleFontSize)
             .presentShowDetails(
-                $viewModel.showPrimaryInfo, imageOrigin: animationImageOrigin ?? .zero,
-                favoriteButtonOrigin: animationFavoriteButtonOrigin)
+                $viewModel.showPrimaryInfo, imageOrigin: animationImageOrigin ?? .zero)
             
             VStack(spacing: 0) {
                 title
@@ -83,6 +78,15 @@ struct HomeView: View {
                 viewModel.refresh()
             }
         }
+        .onPreferenceChange(AnimatablePosterPreferenceKey.self) { value in
+            animatableRects = value
+            print(animatableRects)
+        }
+        .onChange(of: viewModel.showPrimaryInfo) { value in
+            withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
+                self.mainViewModel.isTabBarVisible = value == nil
+            }
+        }
     }
     
     static let scrollViewFirstThreshold: CGFloat = RecommendedShowCard.height * 0.95
@@ -96,7 +100,7 @@ struct HomeView: View {
 
 private extension HomeView {
     
-    // MARK: Title
+    // MARK: - Title
     
     var title: some View {
         Text("Shows")
@@ -118,7 +122,7 @@ private extension HomeView {
     
     static let titlePaddingInterpolator = SlopedStepRange(firstPoint: Self.scrollViewFirstThreshold, firstValue: 16, secondPoint: Self.scrollViewSecondThreshold, secondValue: (UIScreen.width - "Shows".getWidth(using: .boldBodyDefault)) / 2)
     
-    // MARK: Refresh label
+    // MARK: - Refresh
     
     var refreshLabel: some View {
         Text("Release to refresh")
@@ -163,16 +167,8 @@ private extension HomeView {
                         ForEach(viewModel.recommendedShows) { show in
                             RecommendedShowCard(model: show, isFavorite: favoritesService.binding(for: show.id))
                                 .onTapGesture {
-                                    self.animationImageOrigin = recommendedRects[show.id]
-                                    self.animationFavoriteButtonOrigin = recommendedRects[show.id]
+                                    self.animationImageOrigin = animatableRects[.init(id: show.id, type: .recommendedShow)]
                                     viewModel.showPrimaryInfo = .init(from: show)
-                                    
-                                    withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
-                                        self.mainViewModel.isTabBarVisible = false
-                                    }
-                                }
-                                .readRect(into: recommendedRectBinding(id: show.id)) { rect in
-                                    rect.reducingHeight(RecommendedShowCard.height - RecommendedShowCard.imageHeight)
                                 }
                         }
                     }
@@ -180,14 +176,6 @@ private extension HomeView {
                 }
             }
         }
-    }
-    
-    func recommendedRectBinding(id: Int) -> Binding<CGRect> {
-        .init(get: {
-            recommendedRects[id] ?? .zero
-        }, set: { value in
-            recommendedRects[id] = value
-        })
     }
     
     // MARK: Scheduled Shows
@@ -213,16 +201,9 @@ private extension HomeView {
                     ForEach(viewModel.scheduledShows) { show in
                         ScheduledShowCard(model: show)
                             .onTapGesture {
-                                self.animationImageOrigin = scheduledRects[show.id]
-                                self.animationFavoriteButtonOrigin = nil
-                                viewModel.showPrimaryInfo = .init(from: show)
+                                self.animationImageOrigin = animatableRects[.init(id: show.id, type: .scheduledShow)]
                                 
-                                withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
-                                    self.mainViewModel.isTabBarVisible = false
-                                }
-                            }
-                            .readRect(into: scheduledRectBinding(id: show.id)) { rect in
-                                rect.reducingWidth(ScheduledShowCard.width - ScheduledShowCard.height)
+                                viewModel.showPrimaryInfo = .init(from: show)
                             }
                     }
                 }
@@ -230,14 +211,6 @@ private extension HomeView {
                 .padding(.bottom, MainTabBar.height)
             }
         }
-    }
-    
-    func scheduledRectBinding(id: Int) -> Binding<CGRect> {
-        .init(get: {
-            scheduledRects[id] ?? .zero
-        }, set: { value in
-            scheduledRects[id] = value
-        })
     }
 }
 

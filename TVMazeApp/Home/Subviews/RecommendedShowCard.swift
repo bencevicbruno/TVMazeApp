@@ -27,6 +27,7 @@ struct RecommendedShowCard: View {
                     .scaledToFill()
                     .frame(width: Self.width, height: Self.imageHeight)
                     .clipped()
+                    .animatablePoster(id: model.id, type: .recommendedShow)
                     .overlay(alignment: .topLeading) {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(isFavorite ? Color.tvMazeYellow : .clear)

@@ -13,33 +13,24 @@ struct FavoriteShowCard: View {
     @Binding var isFavorite: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            OnlineImage(model.posterURL) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(size: Self.width)
-                    .clipped()
-                    
-            } placeholder: {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .tint(.white)
-                    .frame(size: Self.width)
-            }
-            .overlay(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isFavorite ? Color.tvMazeYellow : .clear)
-                    .frame(size: 40)
-                    .blur(radius: 12)
-            }
-            
-            Text(verbatim: model.title)
-                .style(.smallCaption, color: .white, alignment: .leading)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .padding(8)
+        OnlineImage(model.posterURL) { image in
+            image
+                .resizable()
+                .scaledToFill()
+                .frame(width: Self.width, height: Self.height)
+                .clipped()
+                .animatablePoster(id: model.id, type: .favoriteShow)
+        } placeholder: {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .tint(.white).frame(width: Self.width, height: Self.height)
         }
-        .frame(width: Self.width, height: Self.height)
+        .overlay(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(isFavorite ? Color.tvMazeYellow : .clear)
+                .frame(size: 40)
+                .blur(radius: 12)
+        }
         .background(Color.tvMazeDarkGray)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .overlay(alignment: .topLeading) {
