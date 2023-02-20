@@ -9,22 +9,7 @@ import SwiftUI
 
 extension View {
     
-//    @ViewBuilder
-//    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>) -> some View {
-//        self.overlay {
-//            if let model = binding.wrappedValue {
-//                ShowDetailsView(model: model, isVisible: .init(get: {
-//                    binding.wrappedValue != nil
-//                }, set: { newValue in
-//                    if !newValue {
-//                        binding.wrappedValue = nil
-//                    }
-//                }))
-//            }
-//        }
-//    }
-    
-    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, fromRect originRect: CGRect) -> some View {
+    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, imageOrigin: CGRect, favoriteButtonOrigin: CGRect?) -> some View {
         ZStack {
             self
             
@@ -39,7 +24,8 @@ extension View {
                                 binding.wrappedValue = nil
                             }
                         }),
-                    originFrame: originRect)
+                    imageOrigin: imageOrigin,
+                    favoriteButtonOrigin: favoriteButtonOrigin)
             }
         }
     }
@@ -50,11 +36,14 @@ struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
     
     @ObservedObject var favoritesService = FavoritesService.instance
+    @ObservedObject var mainViewModel = MainViewModel.instance
     
     @State private var recommendedRects = [Int: CGRect]()
     @State private var scheduledRects = [Int: CGRect]()
     
-    @State private var animationOriginRect: CGRect?
+    @State private var animationImageOrigin: CGRect?
+    @State private var animationFavoriteButtonOrigin: CGRect?
+    
     @State private var scrollViewOffset: CGPoint = .zero
     
     var body: some View {
@@ -68,7 +57,9 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
             }
             .padding(.top, 2 * 8 + titleFontSize)
-            .presentShowDetails($viewModel.showPrimaryInfo, fromRect: animationOriginRect ?? .zero)
+            .presentShowDetails(
+                $viewModel.showPrimaryInfo, imageOrigin: animationImageOrigin ?? .zero,
+                favoriteButtonOrigin: animationFavoriteButtonOrigin)
             
             VStack(spacing: 0) {
                 title
@@ -92,7 +83,6 @@ struct HomeView: View {
                 viewModel.refresh()
             }
         }
-        
     }
     
     static let scrollViewFirstThreshold: CGFloat = RecommendedShowCard.height * 0.95
@@ -101,7 +91,7 @@ struct HomeView: View {
     static let refreshThreshold = Self.scrollViewFirstThreshold / 3
     static let refreshMinSize = CGFloat.textSizeSmallLabel
     
-    static let transitionDuration: CGFloat = 2
+    static let transitionDuration: CGFloat = 2.0
 }
 
 private extension HomeView {
@@ -173,8 +163,13 @@ private extension HomeView {
                         ForEach(viewModel.recommendedShows) { show in
                             RecommendedShowCard(model: show, isFavorite: favoritesService.binding(for: show.id))
                                 .onTapGesture {
-                                    self.animationOriginRect = recommendedRects[show.id]
+                                    self.animationImageOrigin = recommendedRects[show.id]
+                                    self.animationFavoriteButtonOrigin = recommendedRects[show.id]
                                     viewModel.showPrimaryInfo = .init(from: show)
+                                    
+                                    withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
+                                        self.mainViewModel.isTabBarVisible = false
+                                    }
                                 }
                                 .readRect(into: recommendedRectBinding(id: show.id)) { rect in
                                     rect.reducingHeight(RecommendedShowCard.height - RecommendedShowCard.imageHeight)
@@ -219,8 +214,13 @@ private extension HomeView {
                     ForEach(viewModel.scheduledShows) { show in
                         ScheduledShowCard(model: show)
                             .onTapGesture {
-                                self.animationOriginRect = scheduledRects[show.id]
+                                self.animationImageOrigin = scheduledRects[show.id]
+                                self.animationFavoriteButtonOrigin = nil
                                 viewModel.showPrimaryInfo = .init(from: show)
+                                
+                                withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
+                                    self.mainViewModel.isTabBarVisible = false
+                                }
                             }
                             .readRect(into: scheduledRectBinding(id: show.id)) { rect in
                                 rect.reducingWidth(ScheduledShowCard.width - ScheduledShowCard.height)
@@ -228,7 +228,7 @@ private extension HomeView {
                     }
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, UIScreen.unsafeBottomPadding / 2)
+                .padding(.bottom, MainTabBar.height)
             }
         }
     }

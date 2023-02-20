@@ -7,16 +7,14 @@
 
 import SwiftUI
 
-enum MainTab: Identifiable {
-    case home
-    case search
-    case favorites
+final class MainViewModel: ObservableObject {
     
-    var id: Self {
-        self
-    }
+    @Published var currentTab: MainTab = .home
+    @Published var isTabBarVisible = true
     
+    private init() {}
     
+    static let instance = MainViewModel()
 }
 
 @main
@@ -26,34 +24,30 @@ struct TVMazeApp: App {
         UIFont.printFonts()
     }
     
-    @State private var currentTab = MainTab.home
+    @ObservedObject var viewModel = MainViewModel.instance
+    
+    @State private var mainTabBarRect: CGRect = .zero
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-//            AnimatedShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
-//                                    isVisible: .constant(true),
-//                                    originFrame: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
-//                .background(.white)
-//            TabView(selection: $currentTab) {
-//                HomeView()
-//                    .tag(MainTab.home)
-//                    .tabItem {
-//                        Text("Home")
-//                    }
-//
-//                SearchView()
-//                    .tag(MainTab.search)
-//                    .tabItem {
-//                        Text("Search")
-//                    }
-//
-//                FavoritesView()
-//                    .tag(MainTab.favorites)
-//                    .tabItem {
-//                        Text("Favorites")
-//                    }
-//            }
+            TabView(selection: $viewModel.currentTab) {
+                HomeView()
+                    .tag(MainTab.home)
+                
+                SearchView()
+                    .tag(MainTab.search)
+                
+                FavoritesView()
+                    .tag(MainTab.favorites)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .overlay(alignment: .bottom) {
+                MainTabBar($viewModel.currentTab)
+                    .allowsHitTesting(viewModel.isTabBarVisible)
+                    .readRect(into: $mainTabBarRect)
+                    .offset(y: viewModel.isTabBarVisible ? 0 : mainTabBarRect.height + MainTabBar.shadowSize)
+            }
+            .edgesIgnoringSafeArea(.all)
         }
     }
 }

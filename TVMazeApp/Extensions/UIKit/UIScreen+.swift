@@ -19,5 +19,5 @@ extension UIScreen {
     
     static let unsafeTopPadding: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 60
     
-    static let unsafeBottomPadding: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 60
+    static let unsafeBottomPadding: CGFloat = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 20
 }

@@ -11,11 +11,13 @@ struct CastMemberModel: Identifiable, Hashable {
     let id: Int
     let name: String
     let avatarURL: String
+    let roleName: String
     
     static func sample(withID id: Int = -1) -> CastMemberModel {
         .init(id: id,
               name: "Johny Bravo",
-              avatarURL: "https://c1-ebgames.eb-cdn.com.au/merchandising/images/packshots/680a399d0cf94d0b97a1c7791bcdc0e4_Large.jpg")
+              avatarURL: "https://c1-ebgames.eb-cdn.com.au/merchandising/images/packshots/680a399d0cf94d0b97a1c7791bcdc0e4_Large.jpg",
+              roleName: "Himself")
     }
 }
 
@@ -34,12 +36,6 @@ struct OffsetToRectModifier: ViewModifier {
             .offset(x: rect == nil ? 0 : (rect!.minX - currentRect.minX),
                     y: rect == nil ? 0 : (rect!.minY - currentRect.minY))
             .readRect(into: $currentRect)
-            .onAppear {
-                print("x offset \(rect == nil ? 0 : (rect!.minX - currentRect.minX))")
-                print("y offset \(rect == nil ? 0 : (rect!.minY - currentRect.minY))")
-                
-                
-            }
     }
 }
 
@@ -53,19 +49,25 @@ extension View {
 struct AnimatedShowDetailsView: View {
     
     @ObservedObject var favoritesService = FavoritesService.instance
+    @ObservedObject var mainViewModel = MainViewModel.instance
     
-    private let model: ShowPrimaryInfoModel
     @Binding var isVisible: Bool
-    private let originFrame: CGRect
+    private let imageOrigin: CGRect
+    private let favoriteButtonOrigin: CGRect?
     
-    init(model: ShowPrimaryInfoModel, isVisible: Binding<Bool>, originFrame: CGRect) {
-        self.model = model
+    @StateObject var viewModel: ShowDetailsViewModel
+    
+    init(model: ShowPrimaryInfoModel, isVisible: Binding<Bool>, imageOrigin: CGRect, favoriteButtonOrigin: CGRect? = nil) {
+        self._viewModel = .init(wrappedValue: .init(model: model))
         self._isVisible = isVisible
-        self.originFrame = originFrame
+        self.imageOrigin = imageOrigin
+        self.favoriteButtonOrigin = favoriteButtonOrigin
     }
     
     @State private var didAppear = false
     @State private var navigationBarSize: CGSize = .zero
+    
+    @State private var castModel: ShowCastModel?
     
     var body: some View {
         ZStack {
@@ -86,6 +88,10 @@ struct AnimatedShowDetailsView: View {
     }
     
     static let imageHeight = UIScreen.height * 2 / 3
+    
+    var isFavorite: Bool {
+        favoritesService.isFavorite(viewModel.model.id)
+    }
 }
 
 private extension AnimatedShowDetailsView {
@@ -115,6 +121,7 @@ private extension AnimatedShowDetailsView {
                                 .onTapGesture {
                                     withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
                                         didAppear = false
+                                        mainViewModel.isTabBarVisible = true
                                     }
                                     
                                     DispatchQueue.main.asyncAfter(deadline: .now() + HomeView.transitionDuration) {
@@ -124,9 +131,13 @@ private extension AnimatedShowDetailsView {
                             
                             Spacer()
                             
-                            FavoriteButton(favoritesService.binding(for: model.id))
-                                .offset(to: didAppear ? nil : originFrame)
+                            FavoriteButton(favoritesService.binding(for: viewModel.model.id))
+                                .background((isFavorite ? Color.tvMazeYellow : .clear).blur(radius: didAppear ? 16 : 8))
+                                .scaleEffect(x: didAppear ? 1 : (favoriteButtonOrigin == nil ? 0 : 1), y: didAppear ? 1 : (favoriteButtonOrigin == nil ? 0 : 1), anchor: .center)
+                                .offset(to: (didAppear || favoriteButtonOrigin == nil) ? nil : favoriteButtonOrigin!)
                                 .offset(y: didAppear ? 0 : navigationBarSize.height)
+                                .opacity(favoriteButtonOrigin == nil ? (didAppear ? 1 : 0) : 1)
+                                
                         }
                         .padding(.horizontal, 24)
                     }
@@ -139,6 +150,7 @@ private extension AnimatedShowDetailsView {
             .frame(width: UIScreen.width, height: Self.imageHeight)
             .edgesIgnoringSafeArea(.all)
             
+            
             Spacer()
         }
         .readSize(into: $navigationBarSize)
@@ -150,20 +162,36 @@ private extension AnimatedShowDetailsView {
     var backgroundImage: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .top, spacing: 0) {
-                Image(uiImage: model.poster)
+                Image(uiImage: viewModel.model.poster)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: didAppear ? UIScreen.width : originFrame.width, height: didAppear ? Self.imageHeight : originFrame.height)
+                    .frame(width: didAppear ? UIScreen.width : imageOrigin.width, height: didAppear ? Self.imageHeight : imageOrigin.height)
                     .clipped()
                     .mask {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: didAppear ? 0 : 16)
+                        if favoriteButtonOrigin == nil {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: didAppear ? 0 : 16)
+                                
+                                Rectangle()
+                                    .padding(.leading, 16)
+                            }
+                        } else {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: didAppear ? 0 : 16)
+                                
+                                Rectangle()
+                                    .padding(.top, 16)
+                            }
+                        }
+                    }.mask {
+                        VStack(spacing: 0) {
+                            Color.black
                             
-                            Rectangle()
-                                .padding(.top, 16)
+                            LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
+                                .frame(height: didAppear ? 40 : 0)
                         }
                     }
-                    .offset(to: didAppear ? nil : originFrame)
+                    .offset(to: didAppear ? nil : imageOrigin)
                 
                 Spacer()
             }
@@ -194,86 +222,23 @@ private extension AnimatedShowDetailsView {
                     Color.clear
                         .frame(height: Self.imageHeight - .textSizeHeader1)
                     
-                    Text(verbatim: model.title)
+                    Text(verbatim: viewModel.model.title)
                         .style(.header1, color: .white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                     
-                    Text(verbatim: model.description)
+                    Text(verbatim: viewModel.model.description)
                         .style(.bodyDefault, color: .white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 28)
                     
-                    castSection
+                    ShowDetailsCastSection(contentState: viewModel.castContentState)
                 }
             }
         }
         .edgesIgnoringSafeArea(.all)
         .offset(y: didAppear ? 0 : UIScreen.height)
-    }
-    
-    static let cast: [CastMemberModel] = (0...10).map { .sample(withID: $0) }
-    
-    var castSection: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                LinearGradient(colors: [.tvMazeBlack, .tvMazeGray], startPoint: .top, endPoint: .bottom)
-                    .frame(height: 40)
-                
-                Color.tvMazeGray
-                    .edgesIgnoringSafeArea(.all)
-            }
-            
-            VStack(alignment: .leading, spacing: 24) {
-                HStack(spacing: 24) {
-                    Rectangle()
-                        .fill(Color.tvMazeWhite)
-                        .frame(height: 2)
-                    
-                    Text(verbatim: "Cast")
-                        .style(.header1, color: .tvMazeWhite)
-                    
-                    Rectangle()
-                        .fill(Color.tvMazeWhite)
-                        .frame(height: 2)
-                }
-                .padding(.horizontal, 16)
-                
-                VStack(alignment: .leading, spacing: 24) {
-                    ForEach(Self.cast) { member in
-                        VStack(spacing: 0) {
-                            HStack(spacing: 16) {
-                                OnlineImage(member.avatarURL) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(size: 80)
-                                        .clipShape(Circle())
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                
-                                Text(verbatim: member.name)
-                                    .style(.bodyLargeDefault, color: .tvMazeWhite)
-                                    .lineLimit(2)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            
-                            if let lastMember = Self.cast.last,
-                               lastMember != member {
-                                Color.tvMazeWhite
-                                    .frame(height: 1)
-                                    .padding(.top, 16)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                }
-            }
-            .padding(.bottom, UIScreen.unsafeBottomPadding)
-            .padding(.top, 44)
-        }
     }
 }
 
@@ -282,7 +247,7 @@ struct AnimatedShowDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         AnimatedShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
                                 isVisible: .constant(true),
-                                originFrame: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
+                                imageOrigin: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
         .background(.white)
     }
 }
