@@ -13,6 +13,10 @@ final class FavoritesViewModel: ObservableObject {
     @Published var isLoadingFavorites = false
     @Published var favoriteShows: [FavoriteShowModel] = []
     
+    @Published var showPrimaryInfo: ShowPrimaryInfoModel?
+    
+    private let showsService = ShowsService.instance
+    
     init() {
         loadFavorites()
     }
@@ -34,14 +38,12 @@ private extension FavoritesViewModel {
             self.favoriteShows = []
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-            guard let self else { return }
-            
-            let newShows = (1...10).randomElement()! > 5 ? Array(1...10) : []
+        Task { @MainActor in
+            let newShows = try await self.showsService.fetchFavoriteShows()
             self.canShowEmptyState = newShows.isEmpty
             
             withAnimation {
-                self.favoriteShows = (1...10).map { .sample(withID: $0) }
+                self.favoriteShows = newShows
             }
             self.isLoadingFavorites = false
         }

@@ -35,18 +35,20 @@ struct TVMazeScrollView<Content>: View where Content: View {
     
     @State private var scrollViewOffset: CGPoint = .zero
     @State private var canTriggerRefresh = false
+    @State private var titleSize: CGSize = .zero
     
     var body: some View {
         ZStack(alignment: .top) {
             OffsettableScrollView(axes: .vertical, showsIndicator: false, offset: $scrollViewOffset) {
                 content()
             }
-            .padding(.top, isTitleHidden ? 0 : 2 * 8 + titleFontSize)
+            .padding(.top, 2 * 8 + titleFontSize + UIScreen.unsafeTopPadding)
             
             VStack(spacing: 0) {
                 titleLabel
-                    .offset(y: isTitleHidden ? -(.textSizeDisplay + 2 * 8 + UIScreen.unsafeTopPadding) : 0)
-                    .animation(.easeOut(duration: 2), value: isTitleHidden)
+                    .padding(.top, UIScreen.unsafeTopPadding)
+                    .readSize(into: $titleSize)
+                    .offset(y: isTitleHidden ? -(titleSize.height) : 0)
                 
                 Spacer()
             }
@@ -55,6 +57,7 @@ struct TVMazeScrollView<Content>: View where Content: View {
         .background(Color.tvMazeBlack)
         .overlay(alignment: .top) {
             refreshLabel
+                .padding(.top, titleFontSize + 2 * 8)
         }
         .onChange(of: scrollViewOffset) { newOffset in
             if newOffset.y > TVMazeScrollViewUtils.refreshThreshold {

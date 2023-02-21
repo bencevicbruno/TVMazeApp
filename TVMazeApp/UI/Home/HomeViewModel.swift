@@ -26,14 +26,19 @@ struct ShowPrimaryInfoModel: Identifiable, Hashable {
         self.poster = CacheService.instance.getImage(for: model.posterURL) ?? UIImage(named: "placeholder_panda")!
         self.description = model.description
     }
+    
+    init(from model: FavoriteShowModel) {
+        self.id = model.id
+        self.title = model.title
+        self.poster = CacheService.instance.getImage(for: model.posterURL) ?? UIImage(named: "placeholder_panda")!
+        self.description = model.description
+    }
 }
 
 final class HomeViewModel: ObservableObject {
     
     @Published var isLoadingRecommendedShows = true
     @Published var isLoadingScheduledShows = true
-    
-    var shouldRefreshOnScrollEnd = false
     
     @Published private(set) var recommendedShows: [RecommendedShowModel] = []
     @Published private(set) var scheduledShows: [ScheduledShowModel] = []
@@ -47,15 +52,7 @@ final class HomeViewModel: ObservableObject {
     }
     
     func refresh() {
-        guard shouldRefreshOnScrollEnd else { return }
-        shouldRefreshOnScrollEnd = false
         fetchShows()
-    }
-    
-    func recommendedShowTapped(_ show: RecommendedShowModel) {
-        withAnimation(.easeOut(duration: HomeView.transitionDuration)) {
-            showPrimaryInfo = .init(from: show)
-        }
     }
     
     func fetchShows() {

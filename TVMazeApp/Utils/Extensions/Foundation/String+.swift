@@ -13,7 +13,7 @@ extension String {
         return (self as NSString).size(withAttributes: [.font: font]).width
     }
     
-    func removingHTML(tags: [String] = ["b", "p", "i"]) -> String {
+    func removingHTML(tags: [String] = ["b", "p", "i", "br", "br "]) -> String {
         return tags.reduce(into: self) { result, tag in
             result = result.replacing("<\(tag)>", with: "").replacing("</\(tag)>", with: "")
         }

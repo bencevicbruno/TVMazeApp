@@ -15,10 +15,13 @@
 		8C0B9A2829A38D6400490E8A /* View+RectReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2729A38D6400490E8A /* View+RectReader.swift */; };
 		8C0B9A2B29A38D8000490E8A /* View+AnimatablePoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2A29A38D8000490E8A /* View+AnimatablePoster.swift */; };
 		8C0B9A2D29A3962D00490E8A /* TVMazeScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2C29A3962D00490E8A /* TVMazeScrollView.swift */; };
+		8C0B9A2F29A3A3D600490E8A /* CastMemberModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2E29A3A3D600490E8A /* CastMemberModel.swift */; };
+		8C0B9A3129A3A3E700490E8A /* View+OffsetToRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3029A3A3E700490E8A /* View+OffsetToRect.swift */; };
+		8C0B9A3329A4C3A100490E8A /* AnimationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3229A4C3A100490E8A /* AnimationUtils.swift */; };
+		8C0B9A3629A4F9FE00490E8A /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3529A4F9FE00490E8A /* MainViewModel.swift */; };
+		8C0B9A3829A4FA1300490E8A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3729A4FA1300490E8A /* MainView.swift */; };
 		8C27F37D299942D7008350B8 /* TVMazeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C27F37C299942D7008350B8 /* TVMazeApp.swift */; };
-		8C27F37F299942D7008350B8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C27F37E299942D7008350B8 /* ContentView.swift */; };
 		8C27F381299942D9008350B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C27F380299942D9008350B8 /* Assets.xcassets */; };
-		8C27F38B2999435B008350B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C27F38A2999435B008350B8 /* AppDelegate.swift */; };
 		8C27F38F29994393008350B8 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C27F38E29994393008350B8 /* UIFont+.swift */; };
 		8C27F39A29994485008350B8 /* Merriweather-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C27F39229994485008350B8 /* Merriweather-Italic.ttf */; };
 		8C27F39B29994485008350B8 /* Merriweather-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C27F39329994485008350B8 /* Merriweather-Regular.ttf */; };
@@ -82,11 +85,14 @@
 		8C0B9A2729A38D6400490E8A /* View+RectReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RectReader.swift"; sourceTree = "<group>"; };
 		8C0B9A2A29A38D8000490E8A /* View+AnimatablePoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+AnimatablePoster.swift"; sourceTree = "<group>"; };
 		8C0B9A2C29A3962D00490E8A /* TVMazeScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeScrollView.swift; sourceTree = "<group>"; };
+		8C0B9A2E29A3A3D600490E8A /* CastMemberModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastMemberModel.swift; sourceTree = "<group>"; };
+		8C0B9A3029A3A3E700490E8A /* View+OffsetToRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+OffsetToRect.swift"; sourceTree = "<group>"; };
+		8C0B9A3229A4C3A100490E8A /* AnimationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationUtils.swift; sourceTree = "<group>"; };
+		8C0B9A3529A4F9FE00490E8A /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		8C0B9A3729A4FA1300490E8A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		8C27F379299942D7008350B8 /* TVMazeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVMazeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C27F37C299942D7008350B8 /* TVMazeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeApp.swift; sourceTree = "<group>"; };
-		8C27F37E299942D7008350B8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8C27F380299942D9008350B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8C27F38A2999435B008350B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C27F38E29994393008350B8 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		8C27F39229994485008350B8 /* Merriweather-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Merriweather-Italic.ttf"; sourceTree = "<group>"; };
 		8C27F39329994485008350B8 /* Merriweather-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Merriweather-Regular.ttf"; sourceTree = "<group>"; };
@@ -153,21 +159,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8C0B9A1A299FEF7D00490E8A /* MainTab */ = {
-			isa = PBXGroup;
-			children = (
-				8C0B9A1B299FEF8C00490E8A /* MainTab.swift */,
-				8C0B9A1F299FF09B00490E8A /* MainTabBar.swift */,
-			);
-			path = MainTab;
-			sourceTree = "<group>";
-		};
 		8C0B9A2929A38D7400490E8A /* View+AnimatablePoster */ = {
 			isa = PBXGroup;
 			children = (
 				8C0B9A2A29A38D8000490E8A /* View+AnimatablePoster.swift */,
 			);
 			path = "View+AnimatablePoster";
+			sourceTree = "<group>";
+		};
+		8C0B9A3429A4F9F200490E8A /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				8C0B9A3929A4FA5D00490E8A /* Main */,
+				8C96E606299A572100971CED /* Home */,
+				8CB793F8299A6FAD00102FEA /* Search */,
+				8CB793FD299A824800102FEA /* Favorites */,
+				8CA605BA299D67D700005244 /* Details */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		8C0B9A3929A4FA5D00490E8A /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				8C0B9A3529A4F9FE00490E8A /* MainViewModel.swift */,
+				8C0B9A3729A4FA1300490E8A /* MainView.swift */,
+				8C0B9A1B299FEF8C00490E8A /* MainTab.swift */,
+				8C0B9A1F299FF09B00490E8A /* MainTabBar.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		8C27F370299942D7008350B8 = {
@@ -189,21 +209,15 @@
 		8C27F37B299942D7008350B8 /* TVMazeApp */ = {
 			isa = PBXGroup;
 			children = (
-				8CA98F2C299D07B500A2B457 /* APIs */,
-				8CA98F22299D062700A2B457 /* Services */,
 				8C27F3A2299944BE008350B8 /* Info.plist */,
 				8C27F37C299942D7008350B8 /* TVMazeApp.swift */,
+				8CA98F2C299D07B500A2B457 /* APIs */,
+				8CA98F22299D062700A2B457 /* Services */,
+				8C0B9A3429A4F9F200490E8A /* UI */,
+				8C27F3B129994F2F008350B8 /* Common */,
 				8CDFAC98299B72920075D777 /* Utils */,
 				8C27F39029994468008350B8 /* Resources */,
-				8C27F38C2999437D008350B8 /* Extensions */,
-				8C27F38A2999435B008350B8 /* AppDelegate.swift */,
-				8C27F37E299942D7008350B8 /* ContentView.swift */,
-				8C0B9A1A299FEF7D00490E8A /* MainTab */,
-				8C96E606299A572100971CED /* Home */,
-				8CB793F8299A6FAD00102FEA /* Search */,
-				8CB793FD299A824800102FEA /* Favorites */,
-				8C27F3B129994F2F008350B8 /* Common */,
-				8CA605BA299D67D700005244 /* Details */,
+				8C0B9A3229A4C3A100490E8A /* AnimationUtils.swift */,
 			);
 			path = TVMazeApp;
 			sourceTree = "<group>";
@@ -278,6 +292,7 @@
 				8C96E5FF299A407E00971CED /* Preview */,
 				8C27F3AB29994ABD008350B8 /* Text+.swift */,
 				8C27F3B4299950B2008350B8 /* View+SizeReader.swift */,
+				8C0B9A3029A3A3E700490E8A /* View+OffsetToRect.swift */,
 				8C0B9A2729A38D6400490E8A /* View+RectReader.swift */,
 				8C0B9A2529A38D4500490E8A /* View+LocationReader.swift */,
 				8C27F3C5299A2F4D008350B8 /* View+Frame.swift */,
@@ -391,6 +406,7 @@
 			isa = PBXGroup;
 			children = (
 				8CA98F26299D064E00A2B457 /* RecommendedShowModel.swift */,
+				8C0B9A2E29A3A3D600490E8A /* CastMemberModel.swift */,
 				8CA98F28299D065C00A2B457 /* ScheduledShowModel.swift */,
 				8CA605AE299D20DB00005244 /* FavoriteShowModel.swift */,
 			);
@@ -445,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				8CDFAC99299B72AC0075D777 /* SlopedStepRange.swift */,
+				8C27F38C2999437D008350B8 /* Extensions */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -536,8 +553,10 @@
 				8C27F3C2299A2EC3008350B8 /* RecommendedShowCard.swift in Sources */,
 				8C96E605299A473B00971CED /* ScheduledShowCard.swift in Sources */,
 				8C27F3B5299950B2008350B8 /* View+SizeReader.swift in Sources */,
+				8C0B9A3129A3A3E700490E8A /* View+OffsetToRect.swift in Sources */,
 				8CDFAC9A299B72AC0075D777 /* SlopedStepRange.swift in Sources */,
 				8C96E601299A408D00971CED /* PreviewDevice.swift in Sources */,
+				8C0B9A3829A4FA1300490E8A /* MainView.swift in Sources */,
 				8C27F3AE29994B31008350B8 /* Font+.swift in Sources */,
 				8C0B9A2D29A3962D00490E8A /* TVMazeScrollView.swift in Sources */,
 				8CA605C8299FAFD700005244 /* CastMemberCell.swift in Sources */,
@@ -560,8 +579,8 @@
 				8C0B9A2429A35C6400490E8A /* Binding.swift in Sources */,
 				8C27F3A929994816008350B8 /* CGFloat+TextSize.swift in Sources */,
 				8C27F3C8299A32A5008350B8 /* Float+.swift in Sources */,
+				8C0B9A3629A4F9FE00490E8A /* MainViewModel.swift in Sources */,
 				8C0B9A20299FF09B00490E8A /* MainTabBar.swift in Sources */,
-				8C27F38B2999435B008350B8 /* AppDelegate.swift in Sources */,
 				8C27F3BA29995701008350B8 /* String+.swift in Sources */,
 				8CA98F29299D065C00A2B457 /* ScheduledShowModel.swift in Sources */,
 				8CA98F2E299D07BC00A2B457 /* TVMazeAPI.swift in Sources */,
@@ -570,8 +589,8 @@
 				8CA605B2299D625A00005244 /* OnlineImageViewModel.swift in Sources */,
 				8C0B9A2B29A38D8000490E8A /* View+AnimatablePoster.swift in Sources */,
 				8CB793FF299A825400102FEA /* FavoritesView.swift in Sources */,
+				8C0B9A2F29A3A3D600490E8A /* CastMemberModel.swift in Sources */,
 				8CDFAC9E299B8ED80075D777 /* FavoritesViewModel.swift in Sources */,
-				8C27F37F299942D7008350B8 /* ContentView.swift in Sources */,
 				8C27F37D299942D7008350B8 /* TVMazeApp.swift in Sources */,
 				8CDFAC9C299B767C0075D777 /* FavoriteShowCard.swift in Sources */,
 				8C0B9A2229A35C4400490E8A /* OffsetAdjustableTitle.swift in Sources */,
@@ -580,6 +599,7 @@
 				8CB793FC299A7C4F00102FEA /* SearchResultCell.swift in Sources */,
 				8C27F3BD299A2A98008350B8 /* UIColor+.swift in Sources */,
 				8CA605AF299D20DB00005244 /* FavoriteShowModel.swift in Sources */,
+				8C0B9A3329A4C3A100490E8A /* AnimationUtils.swift in Sources */,
 				8CA98F1F299CF5FF00A2B457 /* OnlineImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

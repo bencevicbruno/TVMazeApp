@@ -27,8 +27,8 @@ struct RecommendedShowCard: View {
                     .scaledToFill()
                     .frame(width: Self.width, height: Self.imageHeight)
                     .clipped()
-                    .animatablePoster(id: model.id, type: .recommendedShow)
-                    .overlay(alignment: .topLeading) {
+                    .animatablePoster(id: model.id, type: .recommendedShowCard)
+                    .overlay(alignment: .topTrailing) {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(isFavorite ? Color.tvMazeYellow : .clear)
                             .frame(size: 40)
@@ -55,9 +55,10 @@ struct RecommendedShowCard: View {
         .frame(width: Self.width, height: Self.height)
         .background(Color.tvMazeDarkGray)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(alignment: .topLeading) {
+        .overlay(alignment: .topTrailing) {
             FavoriteButton($isFavorite)
                 .id(favoritesService.refreshToken ? 0 : 1)
+                .animatablePoster(id: model.id, type: .favoriteButton)
         }
     }
     

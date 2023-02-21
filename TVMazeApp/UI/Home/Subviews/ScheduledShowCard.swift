@@ -19,7 +19,7 @@ struct ScheduledShowCard: View {
                     .scaledToFill()
                     .frame(size: Self.height)
                     .clipped()
-                    .animatablePoster(id: model.id, type: .scheduledShow)
+                    .animatablePoster(id: model.id, type: .scheduledShowCard)
             } placeholder: {
                 ProgressView()
                     .progressViewStyle(.circular)

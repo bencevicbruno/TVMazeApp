@@ -19,22 +19,23 @@ struct FavoriteShowCard: View {
                 .scaledToFill()
                 .frame(width: Self.width, height: Self.height)
                 .clipped()
-                .animatablePoster(id: model.id, type: .favoriteShow)
+                .animatablePoster(id: model.id, type: .favoriteShowCard)
+                .overlay(alignment: .topTrailing) {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(isFavorite ? Color.tvMazeYellow : .clear)
+                        .frame(size: 40)
+                        .blur(radius: 12)
+                }
         } placeholder: {
             ProgressView()
                 .progressViewStyle(.circular)
                 .tint(.white).frame(width: Self.width, height: Self.height)
         }
-        .overlay(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(isFavorite ? Color.tvMazeYellow : .clear)
-                .frame(size: 40)
-                .blur(radius: 12)
-        }
         .background(Color.tvMazeDarkGray)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(alignment: .topLeading) {
+        .overlay(alignment: .topTrailing) {
             FavoriteButton($isFavorite)
+                .animatablePoster(id: model.id, type: .favoriteButton)
         }
     }
     
