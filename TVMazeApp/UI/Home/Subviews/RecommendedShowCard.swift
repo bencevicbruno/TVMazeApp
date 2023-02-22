@@ -65,16 +65,21 @@ struct RecommendedShowCard: View {
     static let width = UIScreen.width * 0.4
     static let height = Self.width * 1.75
     static let imageHeight = Self.width * 1.25
+    
+    static var imageMask: some View {
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 16)
+                
+            Rectangle()
+                .padding(.top, 10)
+        }
+    }
 }
 
 private extension RecommendedShowCard {
     
     var fullStarsCount: Int {
         Int(ceil(model.rating / 2))
-    }
-    
-    var emptyStarsCount: Int {
-        5 - fullStarsCount
     }
     
     var hasHalfStar: Bool {

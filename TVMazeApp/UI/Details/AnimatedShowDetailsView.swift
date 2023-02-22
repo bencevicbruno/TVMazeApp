@@ -16,6 +16,7 @@ enum ShowDetailsAnimationStep {
 enum ShowDetailsSource {
     case recommended
     case scheduled
+    case search
     case favorites
 }
 
@@ -141,21 +142,13 @@ private extension AnimatedShowDetailsView {
             .mask {
                 switch source {
                 case .recommended:
-                    ZStack {
-                        RoundedRectangle(cornerRadius: didAppear ? 0 : 16)
-                        
-                        Rectangle()
-                            .padding(.top, 16)
-                    }
+                    RecommendedShowCard.imageMask
                 case .scheduled:
-                    ZStack {
-                        RoundedRectangle(cornerRadius: didAppear ? 0 : 16)
-                        
-                        Rectangle()
-                            .padding(.leading, 16)
-                    }
+                    ScheduledShowCard.imageMask
+                case .search:
+                    SearchResultCell.imageMask
                 case .favorites:
-                    RoundedRectangle(cornerRadius: 16)
+                    FavoriteShowCard.imageMask
                 }
             }
             .mask {

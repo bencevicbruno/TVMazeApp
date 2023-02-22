@@ -19,17 +19,8 @@ struct FavoritesView: View {
     @State private var animationFavoriteButtonOrigin: CGRect?
     
     var body: some View {
-        TVMazeScrollView(title: "Shows", isTitleHidden: mainViewModel.isTitleHidden) {
-            Group {
-                if viewModel.canShowEmptyState && viewModel.favoriteShows.isEmpty {
-                    noFavoriteContent
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if viewModel.favoriteShows.isEmpty {
-                    Color.clear
-                } else {
-                    favoritesGrid
-                }
-            }
+        TVMazeScrollView(title: "Favorites", isTitleHidden: mainViewModel.isTitleHidden) {
+            favoritesContent
         } onRefresh: {
             viewModel.refresh()
         }
@@ -38,16 +29,45 @@ struct FavoritesView: View {
         .presentShowDetails(
             $viewModel.showPrimaryInfo, source: .favorites, imageOrigin: animationImageOrigin, favoriteButtonOrigin: animationFavoriteButtonOrigin)
     }
+    
+    enum ContentState: Equatable {
+        case loading
+        case error(mesage: String)
+        case loaded
+    }
 }
 
 private extension FavoritesView {
     
+    var favoritesContent: some View {
+        Group {
+            switch viewModel.contentState {
+            case .loading:
+                Color.clear
+                    .allowsHitTesting(false)
+            case let .error(message):
+                Text("Error\n\(message)")
+            case .loaded:
+                if viewModel.favoriteShows.isEmpty {
+                    noFavoriteContent
+                } else {
+                    favoritesGrid
+                }
+            }
+        }
+        .frame(width: UIScreen.width)
+        .overlay {
+            ProgressView()
+                .tint(.white)
+                .progressViewStyle(.circular)
+                .opacity(viewModel.contentState == .loading ? 1 : 0)
+                .allowsHitTesting(false)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
     var noFavoriteContent: some View {
         VStack(alignment: .center, spacing: 20) {
-            Spacer()
-            
-            Spacer()
-            
             Spacer()
             
             Text("No favorite shows")
@@ -55,19 +75,6 @@ private extension FavoritesView {
             
             Text("Tap on the little heart icon to add a show to favorites.")
                 .style(.lightBodyLarge, color: .white, alignment: .center)
-            
-            Spacer()
-            
-            Text("Tap to refresh")
-                .style(.boldBodyDefault, color: .tvMazeDarkGray)
-                .padding(.horizontal, 32)
-                .padding(.vertical, 16)
-                .background(Color.tvMazeWhite)
-                .clipShape(Capsule())
-                .contentShape(Capsule())
-                .onTapGesture {
-                    viewModel.refresh()
-                }
             
             Spacer()
         }

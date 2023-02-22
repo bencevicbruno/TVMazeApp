@@ -17,5 +17,6 @@ extension String {
         return tags.reduce(into: self) { result, tag in
             result = result.replacing("<\(tag)>", with: "").replacing("</\(tag)>", with: "")
         }
+        .replacing("<br />", with: "")
     }
 }

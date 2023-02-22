@@ -55,6 +55,7 @@ struct HomeView: View {
                 scheduledShows
             }
             .frame(maxWidth: .infinity)
+            .allowsHitTesting(viewModel.showPrimaryInfo == nil)
         } onRefresh: {
             viewModel.refresh()
         }

@@ -39,7 +39,7 @@ struct MainTabBar: View {
         .readRect(into: $rect)
     }
     
-    static let iconSize: CGFloat = 40
+    static let iconSize: CGFloat = 32
     static let iconTopPadding: CGFloat = 12
     static let iconBottomPadding: CGFloat = max(iconTopPadding, UIScreen.unsafeBottomPadding)
     static let height: CGFloat = Self.iconSize + Self.iconTopPadding + Self.iconBottomPadding

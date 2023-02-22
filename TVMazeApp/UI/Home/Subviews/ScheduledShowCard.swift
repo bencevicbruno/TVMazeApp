@@ -51,6 +51,15 @@ struct ScheduledShowCard: View {
     
     static let width = UIScreen.width - 2 * 16
     static let height = Self.width * 0.3
+    
+    static var imageMask: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 16)
+            
+            Rectangle()
+                .padding(.leading, 16)
+        }
+    }
 }
 
 private extension ScheduledShowCard {

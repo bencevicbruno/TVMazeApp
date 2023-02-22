@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8C0B9A1C299FEF8C00490E8A /* MainTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A1B299FEF8C00490E8A /* MainTab.swift */; };
 		8C0B9A20299FF09B00490E8A /* MainTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A1F299FF09B00490E8A /* MainTabBar.swift */; };
-		8C0B9A2229A35C4400490E8A /* OffsetAdjustableTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2129A35C4400490E8A /* OffsetAdjustableTitle.swift */; };
 		8C0B9A2429A35C6400490E8A /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2329A35C6400490E8A /* Binding.swift */; };
 		8C0B9A2629A38D4500490E8A /* View+LocationReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2529A38D4500490E8A /* View+LocationReader.swift */; };
 		8C0B9A2829A38D6400490E8A /* View+RectReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A2729A38D6400490E8A /* View+RectReader.swift */; };
@@ -20,6 +19,8 @@
 		8C0B9A3329A4C3A100490E8A /* AnimationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3229A4C3A100490E8A /* AnimationUtils.swift */; };
 		8C0B9A3629A4F9FE00490E8A /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3529A4F9FE00490E8A /* MainViewModel.swift */; };
 		8C0B9A3829A4FA1300490E8A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3729A4FA1300490E8A /* MainView.swift */; };
+		8C0B9A3B29A5063F00490E8A /* SearchShowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3A29A5063F00490E8A /* SearchShowModel.swift */; };
+		8C0B9A3D29A6499800490E8A /* TestPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0B9A3C29A6499800490E8A /* TestPager.swift */; };
 		8C27F37D299942D7008350B8 /* TVMazeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C27F37C299942D7008350B8 /* TVMazeApp.swift */; };
 		8C27F381299942D9008350B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C27F380299942D9008350B8 /* Assets.xcassets */; };
 		8C27F38F29994393008350B8 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C27F38E29994393008350B8 /* UIFont+.swift */; };
@@ -79,7 +80,6 @@
 /* Begin PBXFileReference section */
 		8C0B9A1B299FEF8C00490E8A /* MainTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTab.swift; sourceTree = "<group>"; };
 		8C0B9A1F299FF09B00490E8A /* MainTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBar.swift; sourceTree = "<group>"; };
-		8C0B9A2129A35C4400490E8A /* OffsetAdjustableTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetAdjustableTitle.swift; sourceTree = "<group>"; };
 		8C0B9A2329A35C6400490E8A /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		8C0B9A2529A38D4500490E8A /* View+LocationReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+LocationReader.swift"; sourceTree = "<group>"; };
 		8C0B9A2729A38D6400490E8A /* View+RectReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+RectReader.swift"; sourceTree = "<group>"; };
@@ -90,6 +90,8 @@
 		8C0B9A3229A4C3A100490E8A /* AnimationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationUtils.swift; sourceTree = "<group>"; };
 		8C0B9A3529A4F9FE00490E8A /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		8C0B9A3729A4FA1300490E8A /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		8C0B9A3A29A5063F00490E8A /* SearchShowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShowModel.swift; sourceTree = "<group>"; };
+		8C0B9A3C29A6499800490E8A /* TestPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPager.swift; sourceTree = "<group>"; };
 		8C27F379299942D7008350B8 /* TVMazeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVMazeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C27F37C299942D7008350B8 /* TVMazeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeApp.swift; sourceTree = "<group>"; };
 		8C27F380299942D9008350B8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -310,7 +312,6 @@
 				8C27F3C3299A2EDA008350B8 /* FavoriteButton.swift */,
 				8C27F3B229994F3B008350B8 /* OffsetableScrollView.swift */,
 				8CA98F1E299CF5FF00A2B457 /* OnlineImage.swift */,
-				8C0B9A2129A35C4400490E8A /* OffsetAdjustableTitle.swift */,
 				8CA605B1299D625A00005244 /* OnlineImageViewModel.swift */,
 				8C0B9A2C29A3962D00490E8A /* TVMazeScrollView.swift */,
 			);
@@ -343,6 +344,7 @@
 			children = (
 				8C96E608299A573A00971CED /* HomeViewModel.swift */,
 				8C27F3AF29994E7B008350B8 /* HomeView.swift */,
+				8C0B9A3C29A6499800490E8A /* TestPager.swift */,
 				8CA605A7299D11FE00005244 /* Subviews */,
 			);
 			path = Home;
@@ -407,6 +409,7 @@
 			children = (
 				8CA98F26299D064E00A2B457 /* RecommendedShowModel.swift */,
 				8C0B9A2E29A3A3D600490E8A /* CastMemberModel.swift */,
+				8C0B9A3A29A5063F00490E8A /* SearchShowModel.swift */,
 				8CA98F28299D065C00A2B457 /* ScheduledShowModel.swift */,
 				8CA605AE299D20DB00005244 /* FavoriteShowModel.swift */,
 			);
@@ -591,9 +594,10 @@
 				8CB793FF299A825400102FEA /* FavoritesView.swift in Sources */,
 				8C0B9A2F29A3A3D600490E8A /* CastMemberModel.swift in Sources */,
 				8CDFAC9E299B8ED80075D777 /* FavoritesViewModel.swift in Sources */,
+				8C0B9A3D29A6499800490E8A /* TestPager.swift in Sources */,
 				8C27F37D299942D7008350B8 /* TVMazeApp.swift in Sources */,
 				8CDFAC9C299B767C0075D777 /* FavoriteShowCard.swift in Sources */,
-				8C0B9A2229A35C4400490E8A /* OffsetAdjustableTitle.swift in Sources */,
+				8C0B9A3B29A5063F00490E8A /* SearchShowModel.swift in Sources */,
 				8CA605B5299D62D700005244 /* CacheService.swift in Sources */,
 				8CA98F27299D064E00A2B457 /* RecommendedShowModel.swift in Sources */,
 				8CB793FC299A7C4F00102FEA /* SearchResultCell.swift in Sources */,

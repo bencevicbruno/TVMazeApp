@@ -16,4 +16,8 @@ final class MainViewModel: ObservableObject {
     private init() {}
     
     static let instance = MainViewModel()
+    
+    var areBarsHidden: Bool {
+        !isTabBarVisible && isTitleHidden
+    }
 }

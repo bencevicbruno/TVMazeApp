@@ -55,6 +55,7 @@ struct AnimatableRectPreferenceKey: PreferenceKey {
 enum AnimatableRectType {
     case recommendedShowCard
     case scheduledShowCard
+    case searchResultCard
     case favoriteShowCard
     case favoriteButton
 }

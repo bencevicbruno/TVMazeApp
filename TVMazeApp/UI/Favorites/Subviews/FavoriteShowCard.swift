@@ -41,6 +41,10 @@ struct FavoriteShowCard: View {
     
     static let width = (UIScreen.width - 3 * 16) / 2
     static let height = Self.width * 4 / 3
+    
+    static var imageMask: some View {
+        RoundedRectangle(cornerRadius: 16)
+    }
 }
 
 struct FavoriteShowCard_Previews: PreviewProvider {

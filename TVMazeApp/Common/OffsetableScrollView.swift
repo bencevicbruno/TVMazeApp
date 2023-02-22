@@ -26,17 +26,41 @@ struct OffsettableScrollView<T: View>: View {
     
     var body: some View {
         ScrollView(axes, showsIndicators: showsIndicator) {
-            GeometryReader { proxy in
-                Color.clear.preference(
-                    key: OffsetPreferenceKey.self,
-                    value: proxy.frame(
-                        in: .named("ScrollViewOrigin")
-                    ).origin
-                )
+            if axes == .vertical {
+                VStack(spacing: 0) {
+                    Color.clear
+                        .frame(size: 0)
+                        .background(
+                            GeometryReader { proxy in
+                                Color.clear.preference(
+                                    key: OffsetPreferenceKey.self,
+                                    value: proxy.frame(
+                                        in: .named("ScrollViewOrigin")
+                                    ).origin
+                                )
+                            }
+                        )
+                    
+                    content
+                }
+            } else {
+                HStack(spacing: 0) {
+                    Color.clear
+                        .frame(size: 0)
+                        .background(
+                            GeometryReader { proxy in
+                                Color.clear.preference(
+                                    key: OffsetPreferenceKey.self,
+                                    value: proxy.frame(
+                                        in: .named("ScrollViewOrigin")
+                                    ).origin
+                                )
+                            }
+                        )
+                    
+                    content
+                }
             }
-            .frame(width: 0, height: 0)
-            
-            content
         }
         .coordinateSpace(name: "ScrollViewOrigin")
         .onPreferenceChange(OffsetPreferenceKey.self) { offset in

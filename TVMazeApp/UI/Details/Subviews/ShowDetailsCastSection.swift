@@ -78,7 +78,7 @@ private extension ShowDetailsCastSection {
                 .frame(height: 100)
                 .frame(maxWidth: .infinity)
         } else {
-            VStack(alignment: .leading, spacing: 0) {
+            LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(cast) { member in
                     VStack(spacing: 0) {
                         CastMemberCell(model: member)

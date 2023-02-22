@@ -5,25 +5,36 @@
 //  Created by Bruno Bencevic on 14.02.2023..
 //
 
+import Combine
 import SwiftUI
 
 final class FavoritesViewModel: ObservableObject {
     
-    @Published var canShowEmptyState = false
-    @Published var isLoadingFavorites = false
+    @Published var contentState: FavoritesView.ContentState = .loading
     @Published var favoriteShows: [FavoriteShowModel] = []
     
     @Published var showPrimaryInfo: ShowPrimaryInfoModel?
     
+    private var isRefreshing = false
+    private var cancellables: Set<AnyCancellable> = []
+    
     private let showsService = ShowsService.instance
+    private let favoritesService = FavoritesService.instance
     
     init() {
         loadFavorites()
+        
+        favoritesService.$refreshToken.sink { [weak self] _ in
+            self?.loadFavorites()
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - User Interaction
     
     func refresh() {
+        guard !isRefreshing else { return }
+        self.isRefreshing = true
         loadFavorites()
     }
 }
@@ -31,21 +42,24 @@ final class FavoritesViewModel: ObservableObject {
 private extension FavoritesViewModel {
     
     func loadFavorites() {
-        canShowEmptyState = false
-        
         withAnimation {
-            isLoadingFavorites = true
-            self.favoriteShows = []
+            contentState = .loading
         }
         
         Task { @MainActor in
-            let newShows = try await self.showsService.fetchFavoriteShows()
-            self.canShowEmptyState = newShows.isEmpty
             
-            withAnimation {
-                self.favoriteShows = newShows
+            do {
+                self.favoriteShows = try await self.showsService.fetchFavoriteShows()
+                withAnimation {
+                    contentState = .loaded
+                }
+            } catch {
+                withAnimation {
+                    contentState = .error(mesage: error.localizedDescription)
+                }
             }
-            self.isLoadingFavorites = false
+            
+            isRefreshing = false
         }
     }
 }
