@@ -14,6 +14,8 @@ struct FavoriteButton: View {
     private let imageSize: CGFloat
     private let iconSize: CGFloat
     
+    @State private var scale: CGFloat = 1.0
+    
     init(_ isFavorite: Binding<Bool>, imageSize: CGFloat = Self.defaultImageSize, iconSize: CGFloat = Self.defaultIconSize) {
         self._isFavorite = isFavorite
         self.imageSize = imageSize
@@ -33,8 +35,20 @@ struct FavoriteButton: View {
             .background(foregroundColor)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .contentShape(Rectangle())
+            .scaleEffect(x: scale, y: scale, anchor: .center)
             .onTapGesture {
                 isFavorite.toggle()
+            }
+            .onChange(of: isFavorite) { _ in
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.3, blendDuration: 0.1)) {
+                    scale = 1.5
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.3, blendDuration: 0.1)) {
+                        scale = 1
+                    }
+                }
             }
     }
     

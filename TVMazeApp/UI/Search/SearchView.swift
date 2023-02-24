@@ -22,6 +22,9 @@ struct SearchView: View {
     var body: some View {
         ZStack(alignment: .top) {
             resultsList
+                .simultaneousGesture(TapGesture().onEnded {
+                    isFieldInFocus = false
+                })
             
             VStack(spacing: 0) {
                 navigationBar
@@ -74,7 +77,9 @@ private extension SearchView {
                 .scaledToFit()
                 .frameAsIcon()
                 .onTapGesture {
-                    viewModel.searchText = ""
+                    withAnimation {
+                        viewModel.searchText = ""
+                    }
                 }
         }
         .frame(height: 50)

@@ -19,6 +19,9 @@ struct ShowDetailsView: View {
     
     @StateObject var viewModel: ShowDetailsViewModel
     
+    @State private var didAppear = false
+    @State private var navigationBarSize: CGSize = .zero
+    
     init(model: ShowPrimaryInfoModel, isVisible: Binding<Bool>, source: ShowDetailsSource, imageOrigin: CGRect, favoriteButtonOrigin: CGRect? = nil) {
         self._viewModel = .init(wrappedValue: .init(model: model))
         self._isVisible = isVisible
@@ -26,11 +29,6 @@ struct ShowDetailsView: View {
         self.imageOrigin = imageOrigin
         self.favoriteButtonOrigin = favoriteButtonOrigin
     }
-    
-    @State private var didAppear = false
-    @State private var navigationBarSize: CGSize = .zero
-    
-    @State private var castModel: ShowCastModel?
     
     var body: some View {
         ZStack {

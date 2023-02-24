@@ -49,10 +49,15 @@ private extension FavoritesViewModel {
         Task { @MainActor in
             
             do {
-                self.favoriteShows = try await self.showsService.fetchFavoriteShows()
+                let favorites = try await self.showsService.fetchFavoriteShows()
+                withAnimation {
+                    self.favoriteShows = favorites
+                }
             } catch {
                 print("Error loading favorites: \(error)")
-                self.favoriteShows = []
+                withAnimation {
+                    self.favoriteShows = []
+                }
             }
             
             self.isLoadingFavoritesShows = false

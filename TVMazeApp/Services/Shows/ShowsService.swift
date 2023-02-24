@@ -17,7 +17,7 @@ final class ShowsService {
     private init() {}
     
     func fetchRecommendedShows() async throws -> [RecommendedShowModel] {
-        let queries = ["Blue", "The", "of", "Another", "Time"]
+        let queries = ["Blue", "The", "of", "Another", "Time", "Him", "Her", "Cobe", "Time", "Bad", "Good", "Evil"]
         
         return try await tvMazeAPI.fetchShows(query: queries.randomElement()!)
             .compactMap { .init(from: $0.show) }
