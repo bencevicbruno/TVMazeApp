@@ -12,8 +12,7 @@ struct TVMazeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TestPager()
-//            MainView()
+            MainView()
                 .preferredColorScheme(.dark)
         }
     }

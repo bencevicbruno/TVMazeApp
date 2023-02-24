@@ -25,17 +25,17 @@ struct RecommendedShowModel: Identifiable, Hashable {
 
 extension RecommendedShowModel {
     
-    init?(from response: EmbeddedShow) {
-        self.id = response.show.id
-        self.title = response.show.name
+    init?(from response: SingleShowResponse) {
+        self.id = response.id
+        self.title = response.name
         
-        guard let posterURL = response.show.image?.original else { return nil }
+        guard let posterURL = response.image?.original else { return nil }
         self.posterURL = posterURL
         
-        guard let rating = response.show.rating.average else { return nil }
+        guard let rating = response.rating.average else { return nil }
         self.rating = rating
         
-        guard let description = response.show.summary else { return nil }
+        guard let description = response.summary else { return nil }
         self.description = description.removingHTML()
     }
 }

@@ -19,57 +19,68 @@ struct RecommendedShowCard: View {
         self._isFavorite = isFavorite
     }
     
+    let scaleInterpolator = TruncatedTriangleInterpolator(firstLowThreshold: UIScreen.width * 3 / 16, firstHighThreshold: UIScreen.width * 7 / 16, secondHighThreshold: UIScreen.width * 9 / 16, secondLowThreshold: UIScreen.width * 13 / 16, minValue: 0.9, maxValue: 1.0)
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            OnlineImage(model.posterURL) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: Self.width, height: Self.imageHeight)
-                    .clipped()
-                    .animatablePoster(id: model.id, type: .recommendedShowCard)
-                    .overlay(alignment: .topTrailing) {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(isFavorite ? Color.tvMazeYellow : .clear)
-                            .frame(size: 40)
-                            .blur(radius: 12)
-                    }
-            } placeholder: {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .tint(.tvMazeWhite)
-                    .frame(width: Self.width, height: Self.imageHeight)
-            }
-            
-            VStack(alignment: .leading, spacing: 6) {
-                stars
+        GeometryReader { proxy in
+            VStack(alignment: .leading, spacing: 0) {
+                OnlineImage(model.posterURL) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: Self.width, height: Self.imageHeight)
+                        .clipped()
+                        .animatablePoster(id: model.id, type: .recommendedShowCard)
+                        .overlay(alignment: .topTrailing) {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(isFavorite ? Color.tvMazeYellow : .clear)
+                                .frame(size: 40)
+                                .blur(radius: 12)
+                        }
+                } placeholder: {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.tvMazeWhite)
+                        .frame(width: Self.width, height: Self.imageHeight)
+                }
                 
-                Text(verbatim: model.title)
-                    .style(.smallCaption, color: .white, alignment: .leading)
-                
-                Spacer(minLength: 0)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(verbatim: model.title)
+                        .style(.header1, color: .white, alignment: .center)
+                        .frame(maxWidth: .infinity)
+                    
+                    
+                    Spacer(minLength: 0)
+                    
+                    stars
+                        .frame(maxWidth: .infinity)
+                }
+                .padding(16)
+                .frame(height: Self.height - Self.imageHeight)
             }
-            .padding(8)
-            .frame(height: Self.height - Self.imageHeight)
+            .frame(width: proxy.size.width, height: proxy.size.height)
+            .background(Color.tvMazeDarkGray)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(alignment: .topTrailing) {
+                FavoriteButton($isFavorite)
+                    .id(favoritesService.refreshToken ? 0 : 1)
+                    .animatablePoster(id: model.id, type: .favoriteButton)
+            }
+            .allowsHitTesting(scaleInterpolator.interpolate(proxy.frame(in: .global).midX) == 1)
+            .scaleEffect(x: scaleInterpolator.interpolate(proxy.frame(in: .global).midX), y: scaleInterpolator.interpolate(proxy.frame(in: .global).midX))
         }
         .frame(width: Self.width, height: Self.height)
-        .background(Color.tvMazeDarkGray)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(alignment: .topTrailing) {
-            FavoriteButton($isFavorite)
-                .id(favoritesService.refreshToken ? 0 : 1)
-                .animatablePoster(id: model.id, type: .favoriteButton)
-        }
+        
     }
     
-    static let width = UIScreen.width * 0.4
-    static let height = Self.width * 1.75
+    static let width = UIScreen.width - 64 * 2
+    static let height = Self.imageHeight + 2 * 16 + 2 * .textSizeHeader1 + 24 + 6
     static let imageHeight = Self.width * 1.25
     
     static var imageMask: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: 16)
-                
+            
             Rectangle()
                 .padding(.top, 10)
         }
@@ -96,7 +107,7 @@ private extension RecommendedShowCard {
                     .resizable()
                     .renderingMode(.template)
                     .scaledToFit()
-                    .frame(size: 14)
+                    .frame(size: 24)
                     .foregroundColor(Color.tvMazeYellow)
             }
             
@@ -105,7 +116,7 @@ private extension RecommendedShowCard {
                     .resizable()
                     .renderingMode(.template)
                     .scaledToFit()
-                    .frame(size: 14)
+                    .frame(size: 24)
                     .foregroundColor(Color.tvMazeYellow)
             }
         }
@@ -115,10 +126,7 @@ private extension RecommendedShowCard {
 struct RecommendedShowCard_Previews: PreviewProvider {
     
     static var previews: some View {
-        HStack {
-            RecommendedShowCard(model: .sample(), isFavorite: .constant(true))
-            
-            RecommendedShowCard(model: .sample(), isFavorite: .constant(false))
-        }
+        RecommendedShowCard(model: .sample(), isFavorite: .constant(true))
+        
     }
 }

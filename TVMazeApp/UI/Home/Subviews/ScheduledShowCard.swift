@@ -29,7 +29,7 @@ struct ScheduledShowCard: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(verbatim: model.title)
-                    .style(.smallCaption, color: .white, alignment: .leading)
+                    .style(.boldSmallCaption, color: .white, alignment: .leading)
                 
                 Spacer(minLength: 0)
                 

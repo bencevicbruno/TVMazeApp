@@ -17,15 +17,15 @@ struct MainView: View {
         TabView(selection: $viewModel.currentTab) {
             HomeView()
                 .tag(MainTab.home)
-                .simultaneousGesture(viewModel.areBarsHidden ? DragGesture() : nil)
+                .simultaneousGesture(viewModel.shouldDisableSwipgesture ? DragGesture() : nil)
             
             SearchView()
                 .tag(MainTab.search)
-                .simultaneousGesture(viewModel.areBarsHidden ? DragGesture() : nil)
+                .simultaneousGesture(viewModel.shouldDisableSwipgesture ? DragGesture() : nil)
             
             FavoritesView()
                 .tag(MainTab.favorites)
-                .simultaneousGesture(viewModel.areBarsHidden ? DragGesture() : nil)
+                .simultaneousGesture(viewModel.shouldDisableSwipgesture ? DragGesture() : nil)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .overlay(alignment: .bottom) {

@@ -24,13 +24,14 @@ struct TVMazeScrollView<Content>: View where Content: View {
     let content: () -> Content
     let onRefresh: (() -> Void)?
     
-    init(title: String, isTitleHidden: Bool, _ content: @escaping () -> Content, onRefresh: (() -> Void)? = nil) {
+    init(title: String, isTitleHidden: Bool, firstThreshold: CGFloat = TVMazeScrollViewUtils.titleFirstThreshold, secondThreshold: CGFloat = TVMazeScrollViewUtils.titleSecondThreshold, _ content: @escaping () -> Content, onRefresh: (() -> Void)? = nil) {
         self.title = title
         self.isTitleHidden = isTitleHidden
         self.content = content
         self.onRefresh = onRefresh
         
-        self.titlePaddingInterpolator = SlopedStepRange(firstPoint: TVMazeScrollViewUtils.titleFirstThreshold, firstValue: 16, secondPoint: TVMazeScrollViewUtils.titleSecondThreshold, secondValue: (UIScreen.width - "Shows".getWidth(using: .boldBodyDefault)) / 2)
+        self.titleSizeInterpolator = SlopedStepInterpolator(firstPoint: firstThreshold, firstValue: .textSizeDisplay, secondPoint: secondThreshold, secondValue: .textSizeLargeBody)
+        self.titlePaddingInterpolator = SlopedStepInterpolator(firstPoint: firstThreshold, firstValue: 16, secondPoint: secondThreshold, secondValue: (UIScreen.width - title.getWidth(using: .boldBodyDefault)) / 2)
     }
     
     @State private var scrollViewOffset: CGPoint = .zero
@@ -41,12 +42,13 @@ struct TVMazeScrollView<Content>: View where Content: View {
         ZStack(alignment: .top) {
             OffsettableScrollView(axes: .vertical, showsIndicator: false, offset: $scrollViewOffset) {
                 content()
+                    .padding(.top, 2 * 8 + titleFontSize + UIScreen.unsafeTopPadding)
             }
-            .padding(.top, 2 * 8 + titleFontSize + UIScreen.unsafeTopPadding)
             
             VStack(spacing: 0) {
                 titleLabel
                     .padding(.top, UIScreen.unsafeTopPadding)
+                    .background(Color.tvMazeBlack)
                     .readSize(into: $titleSize)
                     .offset(y: isTitleHidden ? -(titleSize.height) : 0)
                 
@@ -82,16 +84,16 @@ struct TVMazeScrollView<Content>: View where Content: View {
     }
     
     var titleFontSize: CGFloat {
-        titleSizeInterpolator.interpolate(value: -scrollViewOffset.y)
+        titleSizeInterpolator.interpolate(-scrollViewOffset.y)
     }
     
     var titlePadding: CGFloat {
-        titlePaddingInterpolator.interpolate(value: -scrollViewOffset.y)
+        titlePaddingInterpolator.interpolate(-scrollViewOffset.y)
     }
     
-    let titleSizeInterpolator = SlopedStepRange(firstPoint: TVMazeScrollViewUtils.titleFirstThreshold, firstValue: .textSizeDisplay, secondPoint: TVMazeScrollViewUtils.titleSecondThreshold, secondValue: .textSizeLargeBody)
+    let titleSizeInterpolator: SlopedStepInterpolator
     
-    let titlePaddingInterpolator: SlopedStepRange
+    let titlePaddingInterpolator: SlopedStepInterpolator
     
     // MARK: - Refresh
     
@@ -104,20 +106,20 @@ struct TVMazeScrollView<Content>: View where Content: View {
     }
     
     var refreshOpacity: CGFloat {
-        refreshLabelOpacityInterpolator.interpolate(value: scrollViewOffset.y)
+        refreshLabelOpacityInterpolator.interpolate(scrollViewOffset.y)
     }
     
     var refreshFontSize: CGFloat {
-        refreshLabelSizeInterpolator.interpolate(value: scrollViewOffset.y)
+        refreshLabelSizeInterpolator.interpolate(scrollViewOffset.y)
     }
     
-    let refreshLabelOpacityInterpolator = SlopedStepRange(
+    let refreshLabelOpacityInterpolator = SlopedStepInterpolator(
         firstPoint: TVMazeScrollViewUtils.refreshFirstThreshold,
         firstValue: 0,
         secondPoint: TVMazeScrollViewUtils.refreshSecondThreshold,
         secondValue: 1)
     
-    let refreshLabelSizeInterpolator = SlopedStepRange(
+    let refreshLabelSizeInterpolator = SlopedStepInterpolator(
         firstPoint: TVMazeScrollViewUtils.refreshFirstThreshold,
         firstValue: .textSizeCaption,
         secondPoint: TVMazeScrollViewUtils.refreshSecondThreshold,

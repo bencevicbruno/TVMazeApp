@@ -7,20 +7,7 @@
 
 import SwiftUI
 
-enum ShowDetailsAnimationStep {
-    case togglingBars
-    case animatingPoster
-    case details
-}
-
-enum ShowDetailsSource {
-    case recommended
-    case scheduled
-    case search
-    case favorites
-}
-
-struct AnimatedShowDetailsView: View {
+struct ShowDetailsView: View {
     
     @ObservedObject var favoritesService = FavoritesService.instance
     @ObservedObject var mainViewModel = MainViewModel.instance
@@ -71,7 +58,7 @@ struct AnimatedShowDetailsView: View {
     }
 }
 
-private extension AnimatedShowDetailsView {
+private extension ShowDetailsView {
     
     // MARK: Navigation Bar
     
@@ -186,6 +173,7 @@ private extension AnimatedShowDetailsView {
                 
                 ShowDetailsCastSection(contentState: viewModel.castContentState)
             }
+            .padding(.bottom, UIScreen.unsafeBottomPadding)
             .background(
                 VStack(spacing: 0) {
                     Color.clear
@@ -204,10 +192,10 @@ private extension AnimatedShowDetailsView {
     }
 }
 
-struct AnimatedShowDetailsView_Previews: PreviewProvider {
+struct ShowDetailsView_Previews: PreviewProvider {
     
     static var previews: some View {
-        AnimatedShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
+        ShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
                                 isVisible: .constant(true),
                                 source: .favorites,
                                 imageOrigin: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))

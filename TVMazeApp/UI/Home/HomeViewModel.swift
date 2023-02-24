@@ -33,6 +33,13 @@ struct ShowPrimaryInfoModel: Identifiable, Hashable {
         self.poster = CacheService.instance.getImage(for: model.posterURL) ?? UIImage(named: "placeholder_panda")!
         self.description = model.description
     }
+    
+    init(from model: SearchShowModel) {
+        self.id = model.id
+        self.title = model.title
+        self.poster = CacheService.instance.getImage(for: model.posterURL) ?? UIImage(named: "placeholder_panda")!
+        self.description = model.description
+    }
 }
 
 final class HomeViewModel: ObservableObject {
@@ -56,30 +63,31 @@ final class HomeViewModel: ObservableObject {
     }
     
     func fetchShows() {
+        self.recommendedShows = []
+        self.scheduledShows = []
+        
         Task { @MainActor in
             self.isLoadingRecommendedShows = true
             
             do {
-                print("Fetching")
                 self.recommendedShows = try await showsService.fetchRecommendedShows()
-                print("done")
                 self.isLoadingRecommendedShows = false
             } catch {
-                
-                print("error")
-                print(error)
+                print("Error fetching recommended shows: \(error)")
                 self.isLoadingRecommendedShows = false
             }
-            
+        }
+        
+        Task { @MainActor in
             self.isLoadingScheduledShows = true
 
             do {
                 self.scheduledShows = try await showsService.fetchScheduledShows()
+                self.isLoadingScheduledShows = false
             } catch {
-                print(error)
+                print("Error fetching scheduled shows: \(error)")
+                self.isLoadingScheduledShows = false
             }
-
-            self.isLoadingScheduledShows = false
         }
     }
 }

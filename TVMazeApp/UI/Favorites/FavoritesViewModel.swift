@@ -10,7 +10,7 @@ import SwiftUI
 
 final class FavoritesViewModel: ObservableObject {
     
-    @Published var contentState: FavoritesView.ContentState = .loading
+    @Published var isLoadingFavoritesShows = true
     @Published var favoriteShows: [FavoriteShowModel] = []
     
     @Published var showPrimaryInfo: ShowPrimaryInfoModel?
@@ -43,23 +43,20 @@ private extension FavoritesViewModel {
     
     func loadFavorites() {
         withAnimation {
-            contentState = .loading
+            isLoadingFavoritesShows = true
         }
         
         Task { @MainActor in
             
             do {
                 self.favoriteShows = try await self.showsService.fetchFavoriteShows()
-                withAnimation {
-                    contentState = .loaded
-                }
             } catch {
-                withAnimation {
-                    contentState = .error(mesage: error.localizedDescription)
-                }
+                print("Error loading favorites: \(error)")
+                self.favoriteShows = []
             }
             
-            isRefreshing = false
+            self.isLoadingFavoritesShows = false
+            self.isRefreshing = false
         }
     }
 }

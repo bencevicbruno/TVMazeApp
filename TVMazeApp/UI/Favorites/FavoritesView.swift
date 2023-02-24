@@ -19,8 +19,10 @@ struct FavoritesView: View {
     @State private var animationFavoriteButtonOrigin: CGRect?
     
     var body: some View {
-        TVMazeScrollView(title: "Favorites", isTitleHidden: mainViewModel.isTitleHidden) {
+        TVMazeScrollView(title: "Favorites", isTitleHidden: mainViewModel.isTitleHidden, firstThreshold: 16 + FavoriteShowCard.height, secondThreshold: 2 * 16 + FavoriteShowCard.height) {
             favoritesContent
+                .padding(.top, 16)
+                .padding(.bottom, MainTabBar.shadowSize + MainTabBar.height)
         } onRefresh: {
             viewModel.refresh()
         }
@@ -39,30 +41,24 @@ struct FavoritesView: View {
 
 private extension FavoritesView {
     
+    @ViewBuilder
     var favoritesContent: some View {
         Group {
-            switch viewModel.contentState {
-            case .loading:
-                Color.clear
-                    .allowsHitTesting(false)
-            case let .error(message):
-                Text("Error\n\(message)")
-            case .loaded:
-                if viewModel.favoriteShows.isEmpty {
-                    noFavoriteContent
-                } else {
-                    favoritesGrid
-                }
+            if viewModel.favoriteShows.isEmpty {
+                noFavoriteContent
+            } else {
+                favoritesGrid
             }
         }
-        .frame(width: UIScreen.width)
         .overlay {
             ProgressView()
                 .tint(.white)
                 .progressViewStyle(.circular)
-                .opacity(viewModel.contentState == .loading ? 1 : 0)
+                .shadow(radius: 16)
+                .opacity(viewModel.isLoadingFavoritesShows ? 1 : 0)
+                .frame(maxWidth: .infinity)
+                .frame(height: Self.visibleContentHeight)
                 .allowsHitTesting(false)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     
@@ -79,6 +75,8 @@ private extension FavoritesView {
             Spacer()
         }
         .padding(.horizontal, 64)
+        .frame(maxWidth: .infinity)
+        .frame(height: Self.visibleContentHeight)
     }
     
     var favoritesGrid: some View {
@@ -91,23 +89,24 @@ private extension FavoritesView {
                     .id(show.id)
             }
         }
-        .frame(width: UIScreen.width - 2 * 16)
         .padding(.horizontal, 16)
     }
     
     func showDetails(_ details: ShowPrimaryInfoModel) {
+        self.animationImageOrigin = animatableRects[.init(id: details.id, type: .favoriteShowCard)]
+        self.animationFavoriteButtonOrigin = animatableRects[.init(id: details.id, type: .favoriteButton)]
+        
         withAnimation(AnimationUtils.toggleBarsAnimation) {
             self.mainViewModel.isTabBarVisible = false
             self.mainViewModel.isTitleHidden = true
         }
         
-        self.animationImageOrigin = animatableRects[.init(id: details.id, type: .favoriteShowCard)]
-        self.animationFavoriteButtonOrigin = animatableRects[.init(id: details.id, type: .favoriteButton)]
-        print(animatableRects)
         DispatchQueue.main.asyncAfter(deadline: .now() + AnimationUtils.toggleBarsDuration) {
             self.viewModel.showPrimaryInfo = details
         }
     }
+    
+    static let visibleContentHeight: CGFloat = UIScreen.height - (UIScreen.unsafeTopPadding + .textSizeDisplay + 2 * 8 + MainTabBar.height)
 }
 
 struct FavoritesView_Previews: PreviewProvider {

@@ -9,109 +9,135 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @FocusState var isSearchFieldInFocus
-    @State private var isSearchFieldVisible = false
-    @State private var searchText = ""
+    @ObservedObject var mainViewModel = MainViewModel.instance
+    @StateObject var viewModel = SearchViewModel()
     
-    @State private var isLoading = true
+    @FocusState var isFieldInFocus
+    @State private var navigationBarSize: CGSize = .zero
+    
+    @State private var animatableRects: [AnimatableRect: CGRect] = [:]
+    @State private var animationImageOrigin: CGRect?
+    @State private var animationFavoriteButtonOrigin: CGRect?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            navigationBar
-                .overlay(alignment: .topLeading) {
-                    if isSearchFieldVisible {
-                        searchBar
-                            .transition(.opacity.combined(with: .move(edge: .top)))
-                    }
-                }
-            
+        ZStack(alignment: .top) {
             resultsList
+            
+            VStack(spacing: 0) {
+                navigationBar
+                    .padding(.top, UIScreen.unsafeTopPadding)
+                    .padding(.bottom, 8)
+                    .background(Color.tvMazeBlack)
+                
+                searchField
+                    .background(
+                        Color.tvMazeBlack
+                            .padding(.bottom, 25)
+                    )
+            }
+            .readSize(into: $navigationBarSize)
+            .offset(y: mainViewModel.isTitleHidden ? -navigationBarSize.height : 0)
+            .animation(.linear(duration: AnimationUtils.toggleDetailsDuration), value: mainViewModel.isTitleHidden)
         }
+        .edgesIgnoringSafeArea(.all)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.tvMazeBlack)
-        .preferredColorScheme(isSearchFieldVisible ? .light : .dark)
+        .storeAnimatableRects(in: $animatableRects)
+        .presentShowDetails(
+            $viewModel.showPrimaryInfo, source: .search, imageOrigin: animationImageOrigin, favoriteButtonOrigin: animationFavoriteButtonOrigin)
+        .onChange(of: isFieldInFocus) { isInFocus in
+            mainViewModel.isSwipeGestureDisabled = isInFocus
+        }
     }
 }
 
 private extension SearchView {
     
     var navigationBar: some View {
-        HStack(spacing: 0) {
-            Text("Search")
-                .style(.display, color: .white)
-                .opacity(isSearchFieldInFocus ? 0 : 1)
-                .padding(.vertical, 8)
-            
-            Spacer()
-            
-            Image("icon_search")
-                .resizable()
-                .renderingMode(.template)
-                .scaledToFit()
-                .frameAsIcon(imageSize: 32, iconSize: 40)
-                .foregroundColor(.tvMazeWhite)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    withAnimation {
-                        isSearchFieldVisible = true
-                        isSearchFieldInFocus = true
-                    }
-                }
-        }
-        .padding(.horizontal, 16)
+        Text("Search")
+            .style(.display, color: .white)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
+            .background(Color.tvMazeBlack)
     }
     
-    var searchBar: some View {
-        HStack(spacing: 0) {
-            Image("icon_search")
-                .resizable()
-                .renderingMode(.template)
-                .scaledToFit()
-                .frameAsIcon(imageSize: 24, iconSize: 40)
-                .foregroundColor(.tvMazeDarkGray)
-            
-            TextField("Hhuehuehue", text: $searchText)
-                .focused($isSearchFieldInFocus)
-                .transition(.opacity)
+    var searchField: some View {
+        HStack(spacing: 16) {
+            TextField("Enter show name", text: $viewModel.searchText)
+                .focused($isFieldInFocus)
+                .foregroundColor(.tvMazeBlack)
+                .font(.bodyDefault)
             
             Image("icon_cancel")
                 .resizable()
-                .renderingMode(.template)
                 .scaledToFit()
-                .frameAsIcon(imageSize: 24, iconSize: 40)
-                .foregroundColor(.tvMazeDarkGray)
-                .contentShape(Rectangle())
+                .frameAsIcon()
                 .onTapGesture {
-                    withAnimation {
-                        isSearchFieldInFocus = false
-                        isSearchFieldVisible = false
-                    }
+                    viewModel.searchText = ""
                 }
         }
         .frame(height: 50)
-        .background(.white)
+        .padding(.leading, 16)
+        .padding(.trailing, 8)
+        .background(Color.tvMazeWhite)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .background(
-            Color.white
-                .padding(.bottom, 16)
-        )
+        .shadow(color: .black, radius: 16, y: 8)
         .padding(.horizontal, 16)
     }
     
+    @ViewBuilder
     var resultsList: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            if isLoading {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 60)
-            }
-            
-            LazyVStack(alignment: .leading, spacing: 20) {
-                ForEach(1...10, id: \.self) { _ in
-                    SearchResultCell()
+        if viewModel.searchText == "" {
+            Text("Start typing to see results.")
+                .style(.header1, color: .white, alignment: .center)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onTapGesture {
+                    isFieldInFocus = false
                 }
+        }
+        else if viewModel.searchedShows.isEmpty {
+            Text("No results.")
+                .style(.header1, color: .white, alignment: .center)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onTapGesture {
+                    isFieldInFocus = false
+                }
+        } else {
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(spacing: 16) {
+                    ForEach(viewModel.searchedShows) { model in
+                        SearchResultCell(model: model)
+                            .onTapGesture {
+                                showDetails(.init(from: model))
+                            }
+                    }
+                }
+                .padding(.top, UIScreen.unsafeTopPadding + .textSizeDisplay + 16 + 8 + 50 + 32)
+                .padding(.bottom, MainTabBar.height + MainTabBar.shadowSize)
             }
+            .scrollDismissesKeyboard(.immediately)
+        }
+    }
+    
+    static let contentHeight: CGFloat = UIScreen.height - (UIScreen.unsafeTopPadding + .textSizeDisplay + 2 * 8 + 50 + 16 + MainTabBar.height)
+    static let contentHeightWithoutNavigationBar: CGFloat = Self.contentHeight + UIScreen.unsafeTopPadding + .textSizeDisplay + 2 * 8 + 25
+    
+    func showDetails(_ details: ShowPrimaryInfoModel) {
+        withAnimation(AnimationUtils.toggleBarsAnimation) {
+            self.mainViewModel.isTabBarVisible = false
+            self.mainViewModel.isTitleHidden = true
+        }
+        
+        self.animationImageOrigin = animatableRects[.init(id: details.id, type: .searchResultCard)]
+        self.animationFavoriteButtonOrigin = animatableRects[.init(id: details.id, type: .favoriteButton)]
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + AnimationUtils.toggleBarsDuration) {
+            self.viewModel.showPrimaryInfo = details
         }
     }
 }

@@ -9,74 +9,84 @@ import SwiftUI
 
 struct SearchResultCell: View {
     
-    let id = 1
-    let title: String = "The placeholder panda eats bamboo"
-    let year: Int = 2020
-    let posterURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Grosser_Panda.JPG/1200px-Grosser_Panda.JPG"
-    let category: String = "Nature"
-    let rating: Double = 8
-    let categories = ["Panda", "Panda too"]
+    @ObservedObject var favoritesService = FavoritesService.instance
+    
+    let model: SearchShowModel
     
     var body: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 16) {
-                OnlineImage(posterURL) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(size: Self.imageSize)
-                        .animatablePoster(id: id, type: .searchResultCard)
-                        .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                } placeholder: {
-                    ProgressView()
-                        .tint(.white)
-                        .progressViewStyle(.circular)
-                }
+        VStack(alignment: .leading, spacing: 0) {
+            OnlineImage(model.posterURL) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: Self.width, height: Self.imageHeight)
+                    .animatablePoster(id: model.id, type: .searchResultCard)
+                    .clipped()
+                    .overlay(alignment: .topTrailing) {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(isFavorite ? Color.tvMazeYellow : .clear)
+                            .frame(size: 40)
+                            .blur(radius: 12)
+                    }
+            } placeholder: {
+                ProgressView()
+                    .tint(.white)
+                    .progressViewStyle(.circular)
+                    .frame(width: Self.width, height: Self.imageHeight)
+            }
+            
+            VStack(alignment: .leading) {
+                Text(verbatim: model.title)
+                    .style(.header1, color: .white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 8)
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(verbatim: title)
+                if !model.categories.isEmpty {
+                    Text(verbatim: "Category: \(model.categories.joined(separator: ", "))")
                         .style(.bodyDefault, color: .white)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Spacer(minLength: 0)
-                    
-                    stars
-                        .padding(.bottom, 8)
-                    
-                    Text(verbatim: "Category: \(categories.joined(separator: ", "))")
-                        .style(.smallCaption, color: .tvMazeLightGray)
-                        .opacity(categories.isEmpty ? 0 : 1)
-                        .lineLimit(1)
+                        .padding(.bottom, 12)
                 }
+                
+                stars
             }
-            .frame(height: Self.imageSize)
+            .padding(16)
         }
-        .padding(16)
         .frame(width: Self.width)
         .background(Color.tvMazeDarkGray)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .padding(.horizontal, 16)
+        .overlay(alignment: .topTrailing) {
+            FavoriteButton(favoritesService.binding(for: model.id))
+                .id(favoritesService.refreshToken ? 0 : 1)
+                .animatablePoster(id: model.id, type: .favoriteButton)
+        }
     }
     
     static let width: CGFloat = UIScreen.width - 2 * 16
-    static let height: CGFloat = Self.width
-    
-    static let imageSize: CGFloat = Self.width / 2.75 - 16
+    static let imageHeight: CGFloat = Self.width
     
     static var imageMask: some View {
-        RoundedRectangle(cornerRadius: 16)
+        ZStack {
+            RoundedRectangle(cornerRadius: 16)
+                
+            Rectangle()
+                .padding(.top, 16)
+        }
+    }
+    
+    var isFavorite: Bool {
+        favoritesService.isFavorite(model.id)
     }
 }
 
 private extension SearchResultCell {
     
     var fullStarsCount: Int {
-        Int(ceil(rating / 2))
+        Int(ceil(model.rating / 2))
     }
     
     var hasHalfStar: Bool {
-        let correctRange = rating / 2
+        let correctRange = model.rating / 2
         let wholePart = Int(correctRange)
         
         return (correctRange - Double(wholePart)) >= 0.5
@@ -89,7 +99,7 @@ private extension SearchResultCell {
                     .resizable()
                     .renderingMode(.template)
                     .scaledToFit()
-                    .frame(size: 14)
+                    .frame(size: 24)
                     .foregroundColor(Color.tvMazeYellow)
             }
             
@@ -98,7 +108,7 @@ private extension SearchResultCell {
                     .resizable()
                     .renderingMode(.template)
                     .scaledToFit()
-                    .frame(size: 14)
+                    .frame(size: 24)
                     .foregroundColor(Color.tvMazeYellow)
             }
         }
@@ -108,6 +118,6 @@ private extension SearchResultCell {
 struct SearchResultCell_Previews: PreviewProvider {
     
     static var previews: some View {
-        SearchResultCell()
+        SearchResultCell(model: .sample())
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SlopedStepRange {
+struct SlopedStepInterpolator: Interpolator {
     
     let firstPoint: CGFloat
     let firstValue: CGFloat
@@ -21,7 +21,7 @@ struct SlopedStepRange {
         self.secondValue = secondValue
     }
     
-    func interpolate(value: CGFloat) -> CGFloat {
+    func interpolate(_ value: CGFloat) -> CGFloat {
         guard value >= firstPoint else { return firstValue }
         guard value <= secondPoint else { return secondValue }
         

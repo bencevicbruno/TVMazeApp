@@ -7,31 +7,6 @@
 
 import SwiftUI
 
-extension View {
-    
-    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, source: ShowDetailsSource, imageOrigin: CGRect? = nil, favoriteButtonOrigin: CGRect? = nil) -> some View {
-        ZStack {
-            self
-            
-            if let model = binding.wrappedValue {
-                AnimatedShowDetailsView(
-                    model: model,
-                    isVisible: .init(
-                        get: {
-                            binding.wrappedValue != nil
-                        }, set: { visible in
-                            if !visible {
-                                binding.wrappedValue = nil
-                            }
-                        }),
-                    source: source,
-                    imageOrigin: imageOrigin ?? .zero,
-                    favoriteButtonOrigin: favoriteButtonOrigin)
-            }
-        }
-    }
-}
-
 struct HomeView: View {
     
     @StateObject var viewModel = HomeViewModel()
@@ -39,21 +14,23 @@ struct HomeView: View {
     @ObservedObject var favoritesService = FavoritesService.instance
     @ObservedObject var mainViewModel = MainViewModel.instance
     
+    @State private var recommendedShowsOffset: CGPoint = .zero
     @State private var scrollViewOffset: CGPoint = .zero
+    
     @State private var animatableRects: [AnimatableRect: CGRect] = [:]
     @State private var animationSource: ShowDetailsSource = .recommended
     @State private var animationImageOrigin: CGRect?
     @State private var animationFavoriteButtonOrigin: CGRect?
     
-    @State private var isTitleHidden = false
-    
     var body: some View {
-        TVMazeScrollView(title: "Shows", isTitleHidden: mainViewModel.isTitleHidden) {
-            VStack(alignment: .leading, spacing: 20) {
+        TVMazeScrollView(title: "Shows", isTitleHidden: mainViewModel.isTitleHidden, firstThreshold: RecommendedShowCard.height + 24, secondThreshold: RecommendedShowCard.height + 2 * 24) {
+            VStack(alignment: .leading, spacing: 0) {
                 recommendedShows
+                    .padding(.vertical, 24)
                 
                 scheduledShows
             }
+            .padding(.bottom, MainTabBar.shadowSize)
             .frame(maxWidth: .infinity)
             .allowsHitTesting(viewModel.showPrimaryInfo == nil)
         } onRefresh: {
@@ -70,30 +47,37 @@ private extension HomeView {
     
     // MARK: Recommended Shows
     
+    @ViewBuilder
     var recommendedShows: some View {
-        Group {
-            if viewModel.isLoadingRecommendedShows {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: RecommendedShowCard.height)
-            } else if viewModel.recommendedShows.isEmpty {
-                Text(verbatim: "No recommended shows found.")
-                    .style(.boldBodyDefault, color: .white, alignment: .center)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: RecommendedShowCard.height)
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        ForEach(viewModel.recommendedShows) { show in
-                            RecommendedShowCard(model: show, isFavorite: favoritesService.binding(for: show.id))
-                                .onTapGesture {
-                                    showDetails(.init(from: show), source: .recommended, type: .recommendedShowCard)
-                                }
-                        }
-                    }
-                    .padding(.horizontal, 16)
+        if viewModel.isLoadingRecommendedShows {
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.tvMazeDarkGray)
+                .frame(width: RecommendedShowCard.width, height: RecommendedShowCard.height)
+                .overlay {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.white)
                 }
+                .padding(.horizontal, 64)
+        } else {
+            SnappableScrollView(axes: .horizontal, showsIndicator: false, offset: $recommendedShowsOffset) {
+                HStack(spacing: 16) {
+                    ForEach(viewModel.recommendedShows) { model in
+                        RecommendedShowCard(model: model, isFavorite: favoritesService.binding(for: model.id))
+                            .id(model.id)
+                            .onTapGesture {
+                                showDetails(.init(from: model), source: .recommended, type: .recommendedShowCard)
+                            }
+                    }
+                }
+                .padding(.horizontal, 64)
+            } onSnap: { proxy in
+                let offsetWithoutPadding = -recommendedShowsOffset.x - 64
+                let potentialIndex = offsetWithoutPadding / (RecommendedShowCard.width + 16)
+                let showIndex = Int(round(potentialIndex))
+                
+                let showID = viewModel.recommendedShows[showIndex].id
+                proxy.scrollTo(showID, anchor: .center)
             }
         }
     }

@@ -15,9 +15,7 @@ final class FavoritesService: ObservableObject {
     
     @Published var refreshToken = true
     
-    init() {
-        
-    }
+    private init() {}
     
     func isFavorite(_ id: Int) -> Bool {
         return favorites.contains(where: { $0 == id })

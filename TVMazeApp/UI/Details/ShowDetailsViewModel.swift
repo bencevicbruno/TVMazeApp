@@ -31,8 +31,8 @@ private extension ShowDetailsViewModel {
                 let cast = try await showsService.fetchShowCast(id: model.id)
                 castContentState = .loaded(cast.cast)
             } catch {
+                print("Error loading cast: \(error)")
                 castContentState = .error
-                print(error)
             }
         }
     }
