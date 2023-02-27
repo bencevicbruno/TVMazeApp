@@ -48,7 +48,7 @@ struct SearchResultCell: View {
                         .padding(.bottom, 12)
                 }
                 
-                stars
+                RatingStars(rating: model.rating)
             }
             .padding(16)
         }
@@ -76,42 +76,6 @@ struct SearchResultCell: View {
     
     var isFavorite: Bool {
         favoritesService.isFavorite(model.id)
-    }
-}
-
-private extension SearchResultCell {
-    
-    var fullStarsCount: Int {
-        Int(ceil(model.rating / 2))
-    }
-    
-    var hasHalfStar: Bool {
-        let correctRange = model.rating / 2
-        let wholePart = Int(correctRange)
-        
-        return (correctRange - Double(wholePart)) >= 0.5
-    }
-    
-    var stars: some View {
-        HStack(spacing: 4) {
-            ForEach(1..<fullStarsCount, id: \.self) { _ in
-                Image("icon_star_filled")
-                    .resizable()
-                    .renderingMode(.template)
-                    .scaledToFit()
-                    .frame(size: 24)
-                    .foregroundColor(Color.tvMazeYellow)
-            }
-            
-            if hasHalfStar {
-                Image("icon_star_half")
-                    .resizable()
-                    .renderingMode(.template)
-                    .scaledToFit()
-                    .frame(size: 24)
-                    .foregroundColor(Color.tvMazeYellow)
-            }
-        }
     }
 }
 

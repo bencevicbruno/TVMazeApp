@@ -7,13 +7,24 @@
 
 import SwiftUI
 
+enum AppState {
+    case splash
+    case main
+}
+
 @main
 struct TVMazeApp: App {
     
+    @State private var appState: AppState = .splash
+    
     var body: some Scene {
         WindowGroup {
-            MainView()
-                .preferredColorScheme(.dark)
+            if appState == .splash {
+                SplashScreenView($appState)
+            } else {
+                MainView()
+                    .preferredColorScheme(.dark)
+            }
         }
     }
 }

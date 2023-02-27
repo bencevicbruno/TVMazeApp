@@ -19,7 +19,10 @@ struct FavoritesView: View {
     @State private var animationFavoriteButtonOrigin: CGRect?
     
     var body: some View {
-        TVMazeScrollView(title: "Favorites", isTitleHidden: mainViewModel.isTitleHidden, firstThreshold: 16 + FavoriteShowCard.height, secondThreshold: 2 * 16 + FavoriteShowCard.height) {
+        TVMazeScrollView(title: "Favorites",
+                         isTitleHidden: mainViewModel.isTitleHidden,
+                         firstThreshold: viewModel.favoriteShows.isEmpty ? UIScreen.height : 16 + FavoriteShowCard.height,
+                         secondThreshold: viewModel.favoriteShows.isEmpty ? UIScreen.height : 2 * 16 + FavoriteShowCard.height) {
             favoritesContent
                 .padding(.top, 16)
                 .padding(.bottom, MainTabBar.shadowSize + MainTabBar.height)

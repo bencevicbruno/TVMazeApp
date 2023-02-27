@@ -9,7 +9,7 @@ import SwiftUI
 
 enum SnappableScrollViewUtils {
     
-    static let timerInterval = 0.2
+    static let timerInterval = 0.1
 }
 
 struct SnappableScrollView<T>: View where T: View {

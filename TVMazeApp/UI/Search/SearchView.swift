@@ -69,6 +69,8 @@ private extension SearchView {
         HStack(spacing: 16) {
             TextField("Enter show name", text: $viewModel.searchText)
                 .focused($isFieldInFocus)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
                 .foregroundColor(.tvMazeBlack)
                 .font(.bodyDefault)
             
