@@ -9,4 +9,5 @@ import Foundation
 
 enum TVMazeAPIError: Error {
     case noCastData
+    case faultyService
 }

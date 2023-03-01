@@ -11,7 +11,7 @@ final class TVMazeAPI {
     
     static let instance = TVMazeAPI()
     
-    private let networkService = NetworkService.instance
+    private let networkService = ServiceFactory.networkService
     
     private init() {}
     
@@ -32,6 +32,12 @@ final class TVMazeAPI {
     
     func fetchShow(id: Int) async throws -> SingleShowResponse {
         let url = "https://api.tvmaze.com/shows/\(id)?embed=cast"
+        
+        return try await networkService.fetchJSON(url: url)
+    }
+    
+    func fetchEpisodes(id: Int) async throws -> [EpisodeResponse] {
+        let url = "https://api.tvmaze.com/shows/\(id)/episodes"
         
         return try await networkService.fetchJSON(url: url)
     }

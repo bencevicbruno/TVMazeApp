@@ -11,10 +11,12 @@ struct RatingStars: View {
     
     private let rating: Double
     private let size: CGFloat
+    private let addEmptySpacing: Bool
     
-    init(rating: Double, size: CGFloat = 24) {
+    init(rating: Double, size: CGFloat = 24, addEmptySpacing: Bool = false) {
         self.rating = rating
         self.size = size
+        self.addEmptySpacing = addEmptySpacing
     }
     
     var body: some View {
@@ -37,6 +39,13 @@ struct RatingStars: View {
                     .scaledToFit()
                     .frame(size: size)
                     .foregroundColor(Color.tvMazeYellow)
+            }
+            
+            if addEmptySpacing {
+                ForEach(1..<(5 - fullStarsCount), id: \.self) { index in
+                    Color.clear
+                        .frame(size: size)
+                }
             }
         }
     }

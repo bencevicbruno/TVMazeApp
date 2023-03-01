@@ -36,6 +36,7 @@ struct MainView: View {
                 .animation(.linear, value: viewModel.isTabBarVisible)
         }
         .edgesIgnoringSafeArea(.all)
+        .presentToast(viewModel.toastMessage)
     }
 }
 

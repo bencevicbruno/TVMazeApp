@@ -169,6 +169,8 @@ private extension ShowDetailsView {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 28)
                 
+                ShowDetailsEpisodesSection(contentState: viewModel.episodesContentState)
+                
                 ShowDetailsCastSection(contentState: viewModel.castContentState)
             }
             .padding(.bottom, UIScreen.unsafeBottomPadding)

@@ -18,8 +18,9 @@ final class SearchViewModel: ObservableObject {
     @Published var showPrimaryInfo: ShowPrimaryInfoModel?
     
     private var cancellables: Set<AnyCancellable> = []
+    private var mainViewModel = MainViewModel.instance
     
-    private let showsService = ShowsService.instance
+    private let showsService: ShowsServiceProtocol = ServiceFactory.showsService
     
     init() {
         setupCancellables()
@@ -30,11 +31,8 @@ private extension SearchViewModel {
     
     func setupCancellables() {
         self.$searchText
-            .debounce(for: 0.5, scheduler: RunLoop.main)
             .sink { [weak self] query in
-                if query.isEmpty {
-                    self?.searchedShows = []
-                } else {
+                if !query.isEmpty {
                     self?.searchShows(query: query)
                 }
             }
@@ -49,7 +47,7 @@ private extension SearchViewModel {
                 self.searchedShows = try await showsService.searchShows(keyword: query)
                 self.isSearchingForShows = false
             } catch {
-                print("Error searching shows: \(error)")
+                self.mainViewModel.showToast("Error searching shows: \(error)")
                 self.searchedShows = []
                 self.isSearchingForShows = false
             }

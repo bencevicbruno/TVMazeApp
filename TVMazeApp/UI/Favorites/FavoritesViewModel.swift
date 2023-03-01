@@ -17,8 +17,9 @@ final class FavoritesViewModel: ObservableObject {
     
     private var isRefreshing = false
     private var cancellables: Set<AnyCancellable> = []
+    private var mainViewModel = MainViewModel.instance
     
-    private let showsService = ShowsService.instance
+    private let showsService: ShowsServiceProtocol = ServiceFactory.showsService
     private let favoritesService = FavoritesService.instance
     
     init() {
@@ -54,7 +55,7 @@ private extension FavoritesViewModel {
                     self.favoriteShows = favorites
                 }
             } catch {
-                print("Error loading favorites: \(error)")
+                self.mainViewModel.showToast("Error loading favorites: \(error)")
                 withAnimation {
                     self.favoriteShows = []
                 }

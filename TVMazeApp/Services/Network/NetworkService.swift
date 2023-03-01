@@ -13,9 +13,14 @@ enum NetworkServiceError: Error {
 
 final class NetworkService {
     
-    static let instance = NetworkService()
-    
-    private init() {}
+    private let jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-YYYY"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        return decoder
+    }()
     
     func fetchJSON<T>(url urlString: String) async throws -> T where T: Decodable {
         guard let url = URL(string: urlString) else {
@@ -30,8 +35,6 @@ final class NetworkService {
         print("===== INCOMING RESPONSE =====")
         print("URL: \(urlString)")
         print("Data: \(String(data: data, encoding: .utf8) ?? "None")")
-        
-//        try await Task.sleep(for: .seconds(5))
         
         return try JSONDecoder().decode(T.self, from: data)
     }

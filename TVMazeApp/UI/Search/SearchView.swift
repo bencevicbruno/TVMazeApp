@@ -106,7 +106,7 @@ private extension SearchView {
                 }
         }
         else if viewModel.searchedShows.isEmpty {
-            Text("No results.")
+            Text(viewModel.isSearchingForShows ? "Loading..." : "No results.")
                 .style(.header1, color: .white, alignment: .center)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 16)

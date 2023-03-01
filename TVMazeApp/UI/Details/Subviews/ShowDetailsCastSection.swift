@@ -35,8 +35,6 @@ struct ShowDetailsCastSection: View {
                 switch contentState {
                 case .loading:
                     loadingStateContent
-                case .error:
-                    errorStateContent
                 case let .loaded(cast):
                     loadedStateContent(cast)
                 }
@@ -48,7 +46,6 @@ struct ShowDetailsCastSection: View {
     
     enum ContentState {
         case loading
-        case error
         case loaded([CastMemberModel])
     }
 }
@@ -59,13 +56,6 @@ private extension ShowDetailsCastSection {
         ProgressView()
             .progressViewStyle(.circular)
             .tint(.white)
-            .frame(height: 100)
-            .frame(maxWidth: .infinity)
-    }
-    
-    var errorStateContent: some View {
-        Text(verbatim: "Error loading cast.")
-            .style(.boldCaptionDefualt, color: .white, alignment: .center)
             .frame(height: 100)
             .frame(maxWidth: .infinity)
     }
@@ -113,8 +103,6 @@ struct ShowDetailsCastSection_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView(.vertical) {
             VStack(spacing: 10) {
-                ShowDetailsCastSection(contentState: .error)
-                
                 ShowDetailsCastSection(contentState: .loaded((1...3).map { .sample(withID: $0) }))
                 
                 ShowDetailsCastSection(contentState: .loading)

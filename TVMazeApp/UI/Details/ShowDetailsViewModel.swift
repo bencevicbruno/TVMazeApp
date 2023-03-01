@@ -9,15 +9,19 @@ import SwiftUI
 
 final class ShowDetailsViewModel: ObservableObject {
     
+    @Published var episodesContentState: ShowDetailsEpisodesSection.ContentState = .loading
     @Published var castContentState: ShowDetailsCastSection.ContentState = .loading
     
     let model: ShowPrimaryInfoModel
     
-    private let showsService = ShowsService.instance
+    private var mainViewModel = MainViewModel.instance
+    
+    private let showsService: ShowsServiceProtocol = ServiceFactory.showsService
     
     init(model: ShowPrimaryInfoModel) {
         self.model = model
         fetchCast()
+        fetchEpisodes()
     }
 }
 
@@ -31,8 +35,22 @@ private extension ShowDetailsViewModel {
                 let cast = try await showsService.fetchShowCast(id: model.id)
                 castContentState = .loaded(cast.cast)
             } catch {
-                print("Error loading cast: \(error)")
-                castContentState = .error
+                castContentState = .loaded([])
+                mainViewModel.showToast("Error loading cast: \(error)")
+            }
+        }
+    }
+    
+    private func fetchEpisodes() {
+        episodesContentState = .loading
+        
+        Task { @MainActor in
+            do {
+                episodesContentState = .loaded(try await showsService.fetchShowsEpisodes(id: model.id))
+            } catch {
+                print(error)
+                episodesContentState = .loaded([:])
+                mainViewModel.showToast("Error loading episodes: \(error)")
             }
         }
     }

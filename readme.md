@@ -6,4 +6,4 @@
 <img src="Readme_Resources/Favorite Shows.png" height="300">
 <img src="Readme_Resources/Show Details.png" height="300">
 
-<video src="Readme_Resources/Show_Details_Animation.mp4" height="300">
+<video src="Readme_Resources/Show Details Animation.mp4" height="300">
