@@ -30,8 +30,16 @@ struct TVMazeScrollView<Content>: View where Content: View {
         self.content = content
         self.onRefresh = onRefresh
         
-        self.titleSizeInterpolator = SlopedStepInterpolator(firstPoint: firstThreshold, firstValue: .textSizeDisplay, secondPoint: secondThreshold, secondValue: .textSizeLargeBody)
-        self.titlePaddingInterpolator = SlopedStepInterpolator(firstPoint: firstThreshold, firstValue: 16, secondPoint: secondThreshold, secondValue: (UIScreen.width - title.getWidth(using: .boldBodyDefault)) / 2)
+        self.titleSizeInterpolator = SlopedStepInterpolator(
+            firstPoint: firstThreshold,
+            firstValue: .textSizeDisplay,
+            secondPoint: secondThreshold,
+            secondValue: .textSizeLargeBody)
+        self.titlePaddingInterpolator = SlopedStepInterpolator(
+            firstPoint: firstThreshold,
+            firstValue: 16,
+            secondPoint: secondThreshold,
+            secondValue: (UIScreen.width - title.getWidth(using: .boldBodyDefault)) / 2)
     }
     
     @State private var scrollViewOffset: CGPoint = .zero
@@ -76,7 +84,7 @@ struct TVMazeScrollView<Content>: View where Content: View {
     // MARK: - Title
     
     var titleLabel: some View {
-        Text("Shows")
+        Text(title)
             .style(.init(UIFont.merriweatherBold(size: titleFontSize)), color: .tvMazeWhite)
             .padding(.vertical, 8)
             .padding(.leading, titlePadding)

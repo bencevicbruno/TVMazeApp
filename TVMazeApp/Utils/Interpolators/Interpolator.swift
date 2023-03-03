@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Interpolator {
+protocol Interpolator: Hashable {
     
     func interpolate(_ value: CGFloat) -> CGFloat
 }

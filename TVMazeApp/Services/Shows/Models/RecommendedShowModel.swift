@@ -10,9 +10,9 @@ import Foundation
 struct RecommendedShowModel: Identifiable, Hashable {
     let id: Int
     let title: String
-    let posterURL: String
-    let rating: Double
-    let description: String
+    let posterURL: String?
+    let rating: Double?
+    let description: String?
     
     static func sample(withID id: Int = -1) -> RecommendedShowModel {
         .init(id: id,
@@ -28,14 +28,8 @@ extension RecommendedShowModel {
     init?(from response: SingleShowResponse) {
         self.id = response.id
         self.title = response.name
-        
-        guard let posterURL = response.image?.original else { return nil }
-        self.posterURL = posterURL
-        
-        guard let rating = response.rating.average else { return nil }
-        self.rating = rating
-        
-        guard let description = response.summary else { return nil }
-        self.description = description.removingHTML()
+        self.posterURL = response.image?.original
+        self.rating = response.rating.average
+        self.description = response.summary?.removingHTML()
     }
 }

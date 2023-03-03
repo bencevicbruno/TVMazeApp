@@ -41,7 +41,7 @@ struct RatingStars: View {
                     .foregroundColor(Color.tvMazeYellow)
             }
             
-            if addEmptySpacing {
+            if addEmptySpacing && fullStarsCount != 5 {
                 ForEach(1..<(5 - fullStarsCount), id: \.self) { index in
                     Color.clear
                         .frame(size: size)

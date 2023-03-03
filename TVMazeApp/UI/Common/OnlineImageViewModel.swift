@@ -9,29 +9,38 @@ import UIKit
 
 final class OnlineImageViewModel: ObservableObject {
     
-    @Published var image: UIImage?
+    @Published var state: ContentState = .loading
     
     private let cacheService = CacheService.instance
     
-    private var immediateCache: [String: UIImage] = [:]
+    private static var immediateCache: [String: UIImage] = [:]
     
     init(_ imageURL: String?) {
-        guard let imageURL = imageURL else { return }
+        guard let imageURL = imageURL else {
+            state = .error
+            return
+        }
 
-        if let image = immediateCache[imageURL] {
-            self.image = image
+        if let image = Self.immediateCache[imageURL] {
+            self.state = .loaded(image)
             return
         }
         
         DispatchQueue.global(qos: .background).async { [weak self] in
             if let cachedImage = self?.cacheService.getImage(for: imageURL) {
                 DispatchQueue.main.async {
-                    self?.image = cachedImage
+                    self?.state = .loaded(cachedImage)
                 }
             } else {
                 self?.fetchImage(at: imageURL)
             }
         }
+    }
+    
+    enum ContentState {
+        case loading
+        case loaded(UIImage)
+        case error
     }
 }
 
@@ -39,7 +48,10 @@ private extension OnlineImageViewModel {
     
     func fetchImage(at urlString: String, retriesLeft: Int = 5) {
         guard retriesLeft > 0,
-              let url = URL(string: urlString) else { return }
+              let url = URL(string: urlString) else {
+            self.state = .error
+            return
+        }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if let error = error {
@@ -51,19 +63,21 @@ private extension OnlineImageViewModel {
             guard let self = self else { return }
             guard let data = data else {
                 print("No data recived for image from: \(urlString)")
+                self.state = .error
                 return
             }
             
             guard let image = UIImage(data: data) else {
                 print("Unable to create image from data recieved from: \(urlString)")
+                self.state = .error
                 return
                 
             }
             
             self.cacheService.saveImage(for: urlString, image)
             DispatchQueue.main.async { [weak self] in
-                self?.image = image
-                self?.immediateCache[urlString] = image
+                self?.state = .loaded(image)
+                Self.immediateCache[urlString] = image
             }
         }.resume()
     }

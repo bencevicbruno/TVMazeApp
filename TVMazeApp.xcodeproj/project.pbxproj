@@ -94,11 +94,12 @@
 		8CD6BF6929AF648F00469245 /* ShowEpisodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6BF6829AF648F00469245 /* ShowEpisodeModel.swift */; };
 		8CD6BF6B29AF658800469245 /* ShowEpisodeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6BF6A29AF658800469245 /* ShowEpisodeCard.swift */; };
 		8CD6BF6E29AF73DD00469245 /* ShowDetailsEpisodesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6BF6D29AF73DD00469245 /* ShowDetailsEpisodesSection.swift */; };
-		8CD6BF7029AF741400469245 /* ShowEpisodesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6BF6F29AF741400469245 /* ShowEpisodesModel.swift */; };
 		8CD6BF7229AF7C8600469245 /* EpisodeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6BF7129AF7C8600469245 /* EpisodeResponse.swift */; };
 		8CDFAC9A299B72AC0075D777 /* SlopedStepInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDFAC99299B72AC0075D777 /* SlopedStepInterpolator.swift */; };
 		8CDFAC9C299B767C0075D777 /* FavoriteShowCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDFAC9B299B767C0075D777 /* FavoriteShowCard.swift */; };
 		8CDFAC9E299B8ED80075D777 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDFAC9D299B8ED80075D777 /* FavoritesViewModel.swift */; };
+		8CE54EBC29B2204B00BEC11B /* NoPosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE54EBB29B2204B00BEC11B /* NoPosterView.swift */; };
+		8CE54EBE29B2306C00BEC11B /* InterpolatorExamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE54EBD29B2306C00BEC11B /* InterpolatorExamples.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -191,11 +192,12 @@
 		8CD6BF6829AF648F00469245 /* ShowEpisodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEpisodeModel.swift; sourceTree = "<group>"; };
 		8CD6BF6A29AF658800469245 /* ShowEpisodeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEpisodeCard.swift; sourceTree = "<group>"; };
 		8CD6BF6D29AF73DD00469245 /* ShowDetailsEpisodesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsEpisodesSection.swift; sourceTree = "<group>"; };
-		8CD6BF6F29AF741400469245 /* ShowEpisodesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEpisodesModel.swift; sourceTree = "<group>"; };
 		8CD6BF7129AF7C8600469245 /* EpisodeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeResponse.swift; sourceTree = "<group>"; };
 		8CDFAC99299B72AC0075D777 /* SlopedStepInterpolator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlopedStepInterpolator.swift; sourceTree = "<group>"; };
 		8CDFAC9B299B767C0075D777 /* FavoriteShowCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteShowCard.swift; sourceTree = "<group>"; };
 		8CDFAC9D299B8ED80075D777 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
+		8CE54EBB29B2204B00BEC11B /* NoPosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoPosterView.swift; sourceTree = "<group>"; };
+		8CE54EBD29B2306C00BEC11B /* InterpolatorExamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpolatorExamples.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +266,7 @@
 			children = (
 				8C27F3A2299944BE008350B8 /* Info.plist */,
 				8C27F37C299942D7008350B8 /* TVMazeApp.swift */,
+				8CE54EBD29B2306C00BEC11B /* InterpolatorExamples.swift */,
 				8CA98F2C299D07B500A2B457 /* APIs */,
 				8CA98F22299D062700A2B457 /* Services */,
 				8C0B9A3429A4F9F200490E8A /* UI */,
@@ -361,6 +364,7 @@
 				8C27F3C3299A2EDA008350B8 /* FavoriteButton.swift */,
 				8C27F3B229994F3B008350B8 /* OffsetableScrollView.swift */,
 				8CA98F1E299CF5FF00A2B457 /* OnlineImage.swift */,
+				8CE54EBB29B2204B00BEC11B /* NoPosterView.swift */,
 				8CA605B1299D625A00005244 /* OnlineImageViewModel.swift */,
 				8C0B9A2C29A3962D00490E8A /* TVMazeScrollView.swift */,
 				8C0B9A3C29A6499800490E8A /* SnappableScrollView.swift */,
@@ -522,7 +526,6 @@
 				8CA98F26299D064E00A2B457 /* RecommendedShowModel.swift */,
 				8C0B9A2E29A3A3D600490E8A /* CastMemberModel.swift */,
 				8CD6BF6829AF648F00469245 /* ShowEpisodeModel.swift */,
-				8CD6BF6F29AF741400469245 /* ShowEpisodesModel.swift */,
 				8C0B9A3A29A5063F00490E8A /* SearchShowModel.swift */,
 				8CA98F28299D065C00A2B457 /* ScheduledShowModel.swift */,
 				8CD6BF5E29AF431100469245 /* ShowPrimaryInfoModel.swift */,
@@ -678,6 +681,7 @@
 				8C27F3B029994E7B008350B8 /* HomeView.swift in Sources */,
 				8C96E609299A573A00971CED /* HomeViewModel.swift in Sources */,
 				8CD6BF5D29AE656D00469245 /* View+Toast.swift in Sources */,
+				8CE54EBC29B2204B00BEC11B /* NoPosterView.swift in Sources */,
 				8C6A437629AA1F9D00D487DB /* RatingStars.swift in Sources */,
 				8CA605B7299D638C00005244 /* FileManager+.swift in Sources */,
 				8CA98F24299D063000A2B457 /* ShowsService.swift in Sources */,
@@ -718,6 +722,7 @@
 				8C27F3A6299947B1008350B8 /* UIScreen+.swift in Sources */,
 				8CD6BF6B29AF658800469245 /* ShowEpisodeCard.swift in Sources */,
 				8C0B9A2829A38D6400490E8A /* View+RectReader.swift in Sources */,
+				8CE54EBE29B2306C00BEC11B /* InterpolatorExamples.swift in Sources */,
 				8CB793FA299A6FC300102FEA /* SearchView.swift in Sources */,
 				8CA98F21299CFAA800A2B457 /* FavoritesService.swift in Sources */,
 				8CA605C5299FAE1900005244 /* ShowDetailsCastSection.swift in Sources */,
@@ -744,7 +749,6 @@
 				8CDFAC9E299B8ED80075D777 /* FavoritesViewModel.swift in Sources */,
 				8C6A435E29A8D20200D487DB /* Interpolator.swift in Sources */,
 				8C0B9A3D29A6499800490E8A /* SnappableScrollView.swift in Sources */,
-				8CD6BF7029AF741400469245 /* ShowEpisodesModel.swift in Sources */,
 				8C27F37D299942D7008350B8 /* TVMazeApp.swift in Sources */,
 				8CDFAC9C299B767C0075D777 /* FavoriteShowCard.swift in Sources */,
 				8C0B9A3B29A5063F00490E8A /* SearchShowModel.swift in Sources */,

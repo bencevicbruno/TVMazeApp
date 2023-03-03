@@ -33,6 +33,9 @@ struct SearchResultCell: View {
                     .tint(.white)
                     .progressViewStyle(.circular)
                     .frame(width: Self.width, height: Self.imageHeight)
+            } error: {
+                NoPosterView()
+                    .frame(width: Self.width, height: Self.imageHeight)
             }
             
             VStack(alignment: .leading) {
@@ -48,7 +51,8 @@ struct SearchResultCell: View {
                         .padding(.bottom, 12)
                 }
                 
-                RatingStars(rating: model.rating)
+                RatingStars(rating: model.rating ?? 10)
+                    .opacity(model.rating == nil ? 0 : 1)
             }
             .padding(16)
         }

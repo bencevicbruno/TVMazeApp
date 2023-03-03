@@ -25,6 +25,9 @@ struct ScheduledShowCard: View {
                     .progressViewStyle(.circular)
                     .tint(.tvMazeWhite)
                     .frame(size: Self.height)
+            } error: {
+                NoPosterView()
+                    .frame(size: Self.height)
             }
             
             VStack(alignment: .leading, spacing: 0) {
@@ -66,12 +69,6 @@ private extension ScheduledShowCard {
     
     var categories: String {
         model.categories.joined(separator: ", ")
-    }
-    
-    var airtimeHours: String {
-        let components = Calendar.current.dateComponents([.hour, .minute], from: model.airdate)
-        
-        return (components.hour ?? 0).asDoubleDigit + ":" + (components.minute ?? 0).asDoubleDigit
     }
 }
 

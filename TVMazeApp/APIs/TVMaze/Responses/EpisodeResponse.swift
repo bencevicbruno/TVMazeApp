@@ -12,9 +12,9 @@ struct EpisodeResponse: Decodable {
     let name: String
     let season: Int
     let number: Int
-//    let airdate: Date?
+    let airdate: String
     let rating: Rating
-    let image: ImageResponse
+    let image: ImageResponse?
     let summary: String?
     
     struct Rating: Decodable {

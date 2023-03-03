@@ -36,15 +36,22 @@ struct ShowDetailsEpisodesSection: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: ShowEpisodeCard.height / 2)
             case let .loaded(episodes):
-                LazyVStack(alignment: .leading, spacing: 20) {
-                    ForEach(episodes.keys.sorted(), id: \.self) { seasonNumber in
-                        VStack(spacing: 16) {
-                            seasonsHeader(seasonNumber)
-                            .padding(.horizontal, 16)
-                            
-                            if expandedSeasons.contains(seasonNumber) {
-                                seasonSection(episodes: episodes[seasonNumber] ?? [])
-                                    .transition(.opacity)
+                if episodes.isEmpty {
+                    Text(verbatim: "No episodes data found.")
+                        .style(.boldCaptionDefualt, color: .white, alignment: .center)
+                        .frame(height: 100)
+                        .frame(maxWidth: .infinity)
+                } else {
+                    LazyVStack(alignment: .leading, spacing: 20) {
+                        ForEach(episodes.keys.sorted(), id: \.self) { seasonNumber in
+                            VStack(spacing: 16) {
+                                seasonsHeader(seasonNumber)
+                                .padding(.horizontal, 16)
+                                
+                                if expandedSeasons.contains(seasonNumber) {
+                                    seasonSection(episodes: episodes[seasonNumber] ?? [])
+                                        .transition(.opacity)
+                                }
                             }
                         }
                     }
@@ -97,9 +104,12 @@ private extension ShowDetailsEpisodesSection {
             
             Spacer()
             
-            Rectangle()
-                .fill(expandedSeasons.contains(seasonNumber) ? .green : .red)
-                .frame(size: 40)
+            Image("icon_chevron_down")
+                .resizable()
+                .renderingMode(.template)
+                .scaledToFit()
+                .frameAsIcon()
+                .rotationEffect(.degrees(expandedSeasons.contains(seasonNumber) ? 180 : 0))
                 .contentShape(Rectangle())
                 .onTapGesture {
                     toggleSeason(seasonNumber)

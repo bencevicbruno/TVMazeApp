@@ -29,7 +29,11 @@ struct FavoriteShowCard: View {
         } placeholder: {
             ProgressView()
                 .progressViewStyle(.circular)
-                .tint(.white).frame(width: Self.width, height: Self.height)
+                .tint(.white)
+                .frame(width: Self.width, height: Self.height)
+        } error: {
+            NoPosterView()
+                .frame(width: Self.width, height: Self.height)
         }
         .background(Color.tvMazeDarkGray)
         .clipShape(RoundedRectangle(cornerRadius: 16))

@@ -42,6 +42,9 @@ struct RecommendedShowCard: View {
                         .progressViewStyle(.circular)
                         .tint(.tvMazeWhite)
                         .frame(width: Self.width, height: Self.imageHeight)
+                } error: {
+                    NoPosterView()
+                        .frame(width: Self.width, height: Self.imageHeight)
                 }
                 
                 VStack(alignment: .leading, spacing: 6) {
@@ -49,10 +52,10 @@ struct RecommendedShowCard: View {
                         .style(.header1, color: .white, alignment: .center)
                         .frame(maxWidth: .infinity)
                     
-                    
                     Spacer(minLength: 0)
                     
-                    RatingStars(rating: model.rating)
+                    RatingStars(rating: model.rating ?? 10)
+                        .opacity(model.rating == nil ? 0 : 1)
                         .frame(maxWidth: .infinity)
                 }
                 .padding(16)
@@ -74,7 +77,7 @@ struct RecommendedShowCard: View {
     }
     
     static let width = UIScreen.width - 64 * 2
-    static let height = Self.imageHeight + 2 * 16 + 2 * .textSizeHeader1 + 24 + 6
+    static let height = Self.imageHeight + 2 * 16 + 2 * .textSizeHeader1 + 48 + 6
     static let imageHeight = Self.width * 1.25
     
     static var imageMask: some View {

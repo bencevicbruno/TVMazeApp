@@ -163,11 +163,14 @@ private extension ShowDetailsView {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                 
-                Text(verbatim: viewModel.model.description)
-                    .style(.bodyDefault, color: .white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 28)
+                if let description = viewModel.model.description,
+                   !description.isEmpty {
+                    Text(verbatim: description)
+                        .style(.bodyDefault, color: .white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 28)
+                }
                 
                 ShowDetailsEpisodesSection(contentState: viewModel.episodesContentState)
                 

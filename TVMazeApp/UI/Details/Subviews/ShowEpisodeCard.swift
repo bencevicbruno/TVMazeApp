@@ -21,11 +21,13 @@ struct ShowEpisodeCard: View {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .tint(.white)
+            } error: {
+                NoPosterView()
             }
             .frame(width: Self.width, height: Self.width)
             .clipped()
             .overlay(alignment: .topLeading) {
-                seasonEpisodeOverlay
+                episodeOverlay
             }
             .overlay(alignment: .bottom) {
                 LinearGradient(colors: [.tvMazeDarkGray.opacity(0), .tvMazeDarkGray], startPoint: .top, endPoint: .bottom)
@@ -50,7 +52,8 @@ struct ShowEpisodeCard: View {
                     
                     Spacer()
                     
-                    RatingStars(rating: model.rating, size: .textSizeSmallCaption, addEmptySpacing: true)
+                    RatingStars(rating: model.rating ?? 10, size: .textSizeSmallCaption, addEmptySpacing: true)
+                        .opacity(model.rating == nil ? 0 : 1)
                 }
             }
             .padding(16)
@@ -64,9 +67,9 @@ struct ShowEpisodeCard: View {
 
 private extension ShowEpisodeCard {
     
-    var seasonEpisodeOverlay: some View {
+    var episodeOverlay: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("\(model.season)/\(model.episode)")
+            Text("#\(model.episode)")
                 .style(.boldBodyDefault, color: .white)
                 .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -78,7 +81,7 @@ private extension ShowEpisodeCard {
     }
     
     var airdateLabel: some View {
-        Text(Self.dateFormatter.string(from: model.airdate))
+        Text(model.airdate)
             .style(.boldSmallCaption, color: .tvMazeLightGray)
     }
     

@@ -21,7 +21,7 @@ final class ShowsService: ShowsServiceProtocol {
             .prefix(10)
             .toArray
             .sorted {
-                $0.rating > $1.rating
+                ($0.rating ?? 0) > ($1.rating ?? 0)
             }
     }
     
@@ -36,12 +36,6 @@ final class ShowsService: ShowsServiceProtocol {
     func searchShows(keyword: String) async throws -> [SearchShowModel] {
         return try await tvMazeAPI.fetchShows(query: keyword)
             .compactMap { .init(from: $0.show) }
-            .uniqueOnly
-            .prefix(10)
-            .toArray
-            .sorted {
-                $0.rating > $1.rating
-            }
     }
     
     func fetchShowCast(id: Int) async throws -> ShowCastModel {

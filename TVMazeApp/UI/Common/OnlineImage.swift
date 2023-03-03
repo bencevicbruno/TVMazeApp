@@ -7,25 +7,30 @@
 
 import SwiftUI
 
-struct OnlineImage<Content, Placeholder>: View where Content: View, Placeholder: View {
+struct OnlineImage<Content, Placeholder, Error>: View where Content: View, Placeholder: View, Error: View {
     
     private let contentBuilder: (Image) -> Content
-    private let placeholderBuilder: () -> Placeholder
+    private let placeholderBuilder: Placeholder
+    private let errorBuilder: Error
     
     @StateObject var viewModel: OnlineImageViewModel
     
-    init(_ url: String, content: @escaping (Image) -> Content, placeholder: @escaping () -> Placeholder) {
+    init(_ url: String?, content: @escaping (Image) -> Content, placeholder: () -> Placeholder, error: () -> Error) {
         self.contentBuilder = content
-        self.placeholderBuilder = placeholder
+        self.placeholderBuilder = placeholder()
+        self.errorBuilder = error()
         
         self._viewModel = .init(wrappedValue: .init(url))
     }
     
     var body: some View {
-        if let image = viewModel.image {
-           contentBuilder(Image(uiImage: image))
-        } else {
-            placeholderBuilder()
+        switch viewModel.state {
+        case .loading:
+            placeholderBuilder
+        case let .loaded(uiImage):
+            contentBuilder(Image(uiImage: uiImage))
+        case .error:
+            errorBuilder
         }
     }
 }
@@ -40,6 +45,8 @@ struct OnlineImage_Previews: PreviewProvider {
         } placeholder: {
             ProgressView()
                 .progressViewStyle(.circular)
+        } error: {
+            Text("Error")
         }
     }
 }

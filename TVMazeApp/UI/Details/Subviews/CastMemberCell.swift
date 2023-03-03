@@ -25,6 +25,8 @@ struct CastMemberCell: View {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .tint(.white)
+            } error: {
+                NoPosterView()
             }
             .frame(size: 80)
             .clipShape(Circle())
