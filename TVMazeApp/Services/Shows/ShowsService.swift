@@ -60,6 +60,11 @@ final class ShowsService: ShowsServiceProtocol {
         return result
     }
     
+    func fetchSimilarShows(title: String) async throws -> [SimialarShowModel] {
+        return try await tvMazeAPI.fetchShows(query: String(title.split(separator: " ").randomElement() ?? ""))
+            .compactMap { .init(from: $0.show) }
+    }
+    
     func fetchFavoriteShows() async throws -> [FavoriteShowModel] {
         let favorites = favoritesService.favorites
 

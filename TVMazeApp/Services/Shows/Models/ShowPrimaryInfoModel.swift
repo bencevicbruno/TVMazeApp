@@ -40,4 +40,11 @@ struct ShowPrimaryInfoModel: Identifiable, Hashable {
         self.poster = CacheService.instance.getImage(for: model.posterURL ?? "") ?? UIImage(named: "placeholder_panda")!
         self.description = model.description
     }
+    
+    init(from model: SimialarShowModel) {
+        self.id = model.id
+        self.title = model.title
+        self.poster = CacheService.instance.getImage(for: model.posterURL ?? "") ?? UIImage(named: "placeholder_panda")!
+        self.description = model.description
+    }
 }

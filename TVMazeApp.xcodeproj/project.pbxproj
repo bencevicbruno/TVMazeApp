@@ -63,6 +63,10 @@
 		8C96E601299A408D00971CED /* PreviewDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C96E600299A408D00971CED /* PreviewDevice.swift */; };
 		8C96E605299A473B00971CED /* ScheduledShowCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C96E604299A473B00971CED /* ScheduledShowCard.swift */; };
 		8C96E609299A573A00971CED /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C96E608299A573A00971CED /* HomeViewModel.swift */; };
+		8CA34BD129D4553A004776B3 /* SimilarShowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA34BD029D4553A004776B3 /* SimilarShowModel.swift */; };
+		8CA34BD329D45607004776B3 /* ShowDetailsSimilarShowsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA34BD229D45607004776B3 /* ShowDetailsSimilarShowsSection.swift */; };
+		8CA34BD529D45711004776B3 /* SimilarShowCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA34BD429D45711004776B3 /* SimilarShowCard.swift */; };
+		8CA34BD729D45D89004776B3 /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA34BD629D45D89004776B3 /* LazyView.swift */; };
 		8CA605A9299D139400005244 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA605A8299D139400005244 /* Int+.swift */; };
 		8CA605AB299D1AD300005244 /* Array+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA605AA299D1AD300005244 /* Array+Hashable.swift */; };
 		8CA605AD299D1CEE00005244 /* ArraySlice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA605AC299D1CEE00005244 /* ArraySlice+.swift */; };
@@ -161,6 +165,10 @@
 		8C96E600299A408D00971CED /* PreviewDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDevice.swift; sourceTree = "<group>"; };
 		8C96E604299A473B00971CED /* ScheduledShowCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledShowCard.swift; sourceTree = "<group>"; };
 		8C96E608299A573A00971CED /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		8CA34BD029D4553A004776B3 /* SimilarShowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarShowModel.swift; sourceTree = "<group>"; };
+		8CA34BD229D45607004776B3 /* ShowDetailsSimilarShowsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsSimilarShowsSection.swift; sourceTree = "<group>"; };
+		8CA34BD429D45711004776B3 /* SimilarShowCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarShowCard.swift; sourceTree = "<group>"; };
+		8CA34BD629D45D89004776B3 /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
 		8CA605A8299D139400005244 /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		8CA605AA299D1AD300005244 /* Array+Hashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Hashable.swift"; sourceTree = "<group>"; };
 		8CA605AC299D1CEE00005244 /* ArraySlice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArraySlice+.swift"; sourceTree = "<group>"; };
@@ -368,6 +376,7 @@
 				8CA605B1299D625A00005244 /* OnlineImageViewModel.swift */,
 				8C0B9A2C29A3962D00490E8A /* TVMazeScrollView.swift */,
 				8C0B9A3C29A6499800490E8A /* SnappableScrollView.swift */,
+				8CA34BD629D45D89004776B3 /* LazyView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -504,6 +513,8 @@
 				8CA605C7299FAFD700005244 /* CastMemberCell.swift */,
 				8CD6BF6D29AF73DD00469245 /* ShowDetailsEpisodesSection.swift */,
 				8CD6BF6A29AF658800469245 /* ShowEpisodeCard.swift */,
+				8CA34BD229D45607004776B3 /* ShowDetailsSimilarShowsSection.swift */,
+				8CA34BD429D45711004776B3 /* SimilarShowCard.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -524,6 +535,7 @@
 			isa = PBXGroup;
 			children = (
 				8CA98F26299D064E00A2B457 /* RecommendedShowModel.swift */,
+				8CA34BD029D4553A004776B3 /* SimilarShowModel.swift */,
 				8C0B9A2E29A3A3D600490E8A /* CastMemberModel.swift */,
 				8CD6BF6829AF648F00469245 /* ShowEpisodeModel.swift */,
 				8C0B9A3A29A5063F00490E8A /* SearchShowModel.swift */,
@@ -698,6 +710,7 @@
 				8C0B9A3129A3A3E700490E8A /* View+OffsetToRect.swift in Sources */,
 				8CDFAC9A299B72AC0075D777 /* SlopedStepInterpolator.swift in Sources */,
 				8C6A436629A8D4A200D487DB /* CastResponse.swift in Sources */,
+				8CA34BD129D4553A004776B3 /* SimilarShowModel.swift in Sources */,
 				8C96E601299A408D00971CED /* PreviewDevice.swift in Sources */,
 				8CD6BF5B29AE643300469245 /* ToastOverlay.swift in Sources */,
 				8C0B9A3829A4FA1300490E8A /* MainView.swift in Sources */,
@@ -719,6 +732,7 @@
 				8CA605AB299D1AD300005244 /* Array+Hashable.swift in Sources */,
 				8C27F3C6299A2F4D008350B8 /* View+Frame.swift in Sources */,
 				8C27F38F29994393008350B8 /* UIFont+.swift in Sources */,
+				8CA34BD729D45D89004776B3 /* LazyView.swift in Sources */,
 				8C27F3A6299947B1008350B8 /* UIScreen+.swift in Sources */,
 				8CD6BF6B29AF658800469245 /* ShowEpisodeCard.swift in Sources */,
 				8C0B9A2829A38D6400490E8A /* View+RectReader.swift in Sources */,
@@ -742,6 +756,7 @@
 				8C6A435C29A8D1D800D487DB /* TruncatedTriangleInterpolator.swift in Sources */,
 				8CD6BF7229AF7C8600469245 /* EpisodeResponse.swift in Sources */,
 				8CA605B2299D625A00005244 /* OnlineImageViewModel.swift in Sources */,
+				8CA34BD329D45607004776B3 /* ShowDetailsSimilarShowsSection.swift in Sources */,
 				8C0B9A2B29A38D8000490E8A /* View+AnimatablePoster.swift in Sources */,
 				8CB793FF299A825400102FEA /* FavoritesView.swift in Sources */,
 				8C7F9F1C29ACEB7C00F8F91A /* SplashScreenView.swift in Sources */,
@@ -754,6 +769,7 @@
 				8C0B9A3B29A5063F00490E8A /* SearchShowModel.swift in Sources */,
 				8CA605B5299D62D700005244 /* CacheService.swift in Sources */,
 				8CA98F27299D064E00A2B457 /* RecommendedShowModel.swift in Sources */,
+				8CA34BD529D45711004776B3 /* SimilarShowCard.swift in Sources */,
 				8CB793FC299A7C4F00102FEA /* SearchResultCell.swift in Sources */,
 				8C27F3BD299A2A98008350B8 /* UIColor+.swift in Sources */,
 				8CA605AF299D20DB00005244 /* FavoriteShowModel.swift in Sources */,
@@ -894,7 +910,6 @@
 				INFOPLIST_FILE = TVMazeApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "TV Maze";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreenStoryboard.storyboard;
@@ -932,7 +947,6 @@
 				INFOPLIST_FILE = TVMazeApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "TV Maze";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreenStoryboard.storyboard;

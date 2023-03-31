@@ -48,7 +48,15 @@ struct AnimatableRectPreferenceKey: PreferenceKey {
    static var defaultValue: [AnimatableRect: CGRect] = [:]
    
    static func reduce(value: inout [AnimatableRect: CGRect], nextValue: () -> [AnimatableRect: CGRect]) {
-       value.merge(nextValue(), uniquingKeysWith: { first, second in first })
+       value.merge(nextValue(), uniquingKeysWith: { first, second in
+           if first == .zero && second == .zero {
+               return .zero
+           } else if first == .zero {
+               return second
+           } else {
+               return first
+           }
+       })
    }
 }
 
@@ -57,6 +65,7 @@ enum AnimatableRectType {
     case scheduledShowCard
     case searchResultCard
     case favoriteShowCard
+    case similarShowCard
     case favoriteButton
 }
 

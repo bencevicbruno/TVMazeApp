@@ -14,5 +14,6 @@ protocol ShowsServiceProtocol: AnyObject {
     func searchShows(keyword: String) async throws -> [SearchShowModel]
     func fetchShowCast(id: Int) async throws -> ShowCastModel
     func fetchShowsEpisodes(id: Int) async throws -> [Int: [ShowEpisodeModel]]
+    func fetchSimilarShows(title: String) async throws -> [SimialarShowModel]
     func fetchFavoriteShows() async throws -> [FavoriteShowModel]
 }

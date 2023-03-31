@@ -34,6 +34,11 @@ final class FaultyShowsService: ShowsServiceProtocol {
         throw TVMazeAPIError.faultyService
     }
     
+    func fetchSimilarShows(title: String) async throws -> [SimialarShowModel] {
+        try await Task.sleep(for: .seconds(2))
+        throw TVMazeAPIError.faultyService
+    }
+    
     func fetchFavoriteShows() async throws -> [FavoriteShowModel] {
         try await Task.sleep(for: .seconds(2))
         throw TVMazeAPIError.faultyService

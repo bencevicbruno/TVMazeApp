@@ -9,8 +9,15 @@ import SwiftUI
 
 final class ShowDetailsViewModel: ObservableObject {
     
-    @Published var episodesContentState: ShowDetailsEpisodesSection.ContentState = .loading
-    @Published var castContentState: ShowDetailsCastSection.ContentState = .loading
+    @Published var isLoadingEpisodes = true
+    @Published var isLoadingCast = true
+    @Published var isLoadingSimilarShows = true
+    
+    @Published var episodes: [Int: [ShowEpisodeModel]]?
+    @Published var cast: ShowCastModel?
+    @Published var similarShows: [SimialarShowModel] = []
+    
+    @Published var similarShowPrimaryInfo: ShowPrimaryInfoModel?
     
     let model: ShowPrimaryInfoModel
     
@@ -20,38 +27,65 @@ final class ShowDetailsViewModel: ObservableObject {
     
     init(model: ShowPrimaryInfoModel) {
         self.model = model
-        fetchCast()
         fetchEpisodes()
+        fetchCast()
+        fetchSimilarShows()
     }
 }
 
 private extension ShowDetailsViewModel {
     
-    private func fetchCast() {
-        castContentState = .loading
+    private func fetchEpisodes() {
+        self.isLoadingEpisodes = true
         
         Task { @MainActor in
             do {
-                let cast = try await showsService.fetchShowCast(id: model.id)
-                castContentState = .loaded(cast.cast)
+                let result = try await showsService.fetchShowsEpisodes(id: model.id)
+                
+                withAnimation {
+                    self.episodes = result
+                }
             } catch {
-                castContentState = .loaded([])
-                mainViewModel.showToast("Error loading cast: \(error)")
+                mainViewModel.showToast("Error loading episodes: \(error)")
             }
+            
+            self.isLoadingEpisodes = false
         }
     }
     
-    private func fetchEpisodes() {
-        episodesContentState = .loading
+    private func fetchCast() {
+        self.isLoadingCast = true
         
         Task { @MainActor in
             do {
-                episodesContentState = .loaded(try await showsService.fetchShowsEpisodes(id: model.id))
+                let result = try await showsService.fetchShowCast(id: model.id)
+                
+                withAnimation {
+                    self.cast = result
+                }
             } catch {
-                print(error)
-                episodesContentState = .loaded([:])
-                mainViewModel.showToast("Error loading episodes: \(error)")
+                mainViewModel.showToast("Error loading cast: \(error)")
             }
+            
+            self.isLoadingCast = false
+        }
+    }
+    
+    private func fetchSimilarShows() {
+        self.isLoadingSimilarShows = true
+        
+        Task { @MainActor in
+            do {
+                let result = try await showsService.fetchSimilarShows(title: model.title).filter { $0.id != model.id }
+                
+                withAnimation {
+                    self.similarShows = result
+                }
+            } catch {
+                mainViewModel.showToast("Error loading recommended shows: \(error)")
+            }
+            
+            self.isLoadingSimilarShows = false
         }
     }
 }

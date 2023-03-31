@@ -12,11 +12,12 @@ enum ShowDetailsSource {
     case scheduled
     case search
     case favorites
+    case similar
 }
 
 extension View {
     
-    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, source: ShowDetailsSource, imageOrigin: CGRect? = nil, favoriteButtonOrigin: CGRect? = nil) -> some View {
+    func presentShowDetails(_ binding: Binding<ShowPrimaryInfoModel?>, source: ShowDetailsSource, imageOrigin: CGRect? = nil, favoriteButtonOrigin: CGRect? = nil, isRoot: Bool = true) -> some View {
         ZStack {
             self
             
@@ -33,7 +34,8 @@ extension View {
                         }),
                     source: source,
                     imageOrigin: imageOrigin ?? .zero,
-                    favoriteButtonOrigin: favoriteButtonOrigin)
+                    favoriteButtonOrigin: favoriteButtonOrigin,
+                    isRoot: isRoot)
             }
         }
     }

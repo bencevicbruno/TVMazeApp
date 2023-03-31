@@ -16,18 +16,23 @@ struct ShowDetailsView: View {
     private let source: ShowDetailsSource
     private let imageOrigin: CGRect
     private let favoriteButtonOrigin: CGRect?
+    private let isRoot: Bool
     
     @StateObject var viewModel: ShowDetailsViewModel
     
     @State private var didAppear = false
     @State private var navigationBarSize: CGSize = .zero
     
-    init(model: ShowPrimaryInfoModel, isVisible: Binding<Bool>, source: ShowDetailsSource, imageOrigin: CGRect, favoriteButtonOrigin: CGRect? = nil) {
+    @State private var animationImageOrigin: CGRect?
+    @State private var animationFavoriteButtonOrigin: CGRect?
+    
+    init(model: ShowPrimaryInfoModel, isVisible: Binding<Bool>, source: ShowDetailsSource, imageOrigin: CGRect, favoriteButtonOrigin: CGRect? = nil, isRoot: Bool) {
         self._viewModel = .init(wrappedValue: .init(model: model))
         self._isVisible = isVisible
         self.source = source
         self.imageOrigin = imageOrigin
         self.favoriteButtonOrigin = favoriteButtonOrigin
+        self.isRoot = isRoot
     }
     
     var body: some View {
@@ -47,6 +52,8 @@ struct ShowDetailsView: View {
             }
         }
         .allowsHitTesting(didAppear)
+        .presentShowDetails(
+            $viewModel.similarShowPrimaryInfo, source: .similar, imageOrigin: animationImageOrigin, favoriteButtonOrigin: animationFavoriteButtonOrigin, isRoot: false)
     }
     
     static let imageHeight = UIScreen.height * 2 / 3
@@ -80,7 +87,7 @@ private extension ShowDetailsView {
                                 isVisible = false
                                 
                                 withAnimation(AnimationUtils.toggleBarsAnimation) {
-                                    self.mainViewModel.isTabBarVisible = true
+                                    self.mainViewModel.isTabBarVisible = true && isRoot
                                     self.mainViewModel.isTitleHidden = false
                                 }
                             }
@@ -134,6 +141,8 @@ private extension ShowDetailsView {
                     SearchResultCell.imageMask
                 case .favorites:
                     FavoriteShowCard.imageMask
+                case .similar:
+                    SimilarShowCard.imageMask
                 }
             }
             .mask {
@@ -172,9 +181,25 @@ private extension ShowDetailsView {
                         .padding(.vertical, 28)
                 }
                 
-                ShowDetailsEpisodesSection(contentState: viewModel.episodesContentState)
+                if let episodes = viewModel.episodes,
+                   !episodes.isEmpty {
+                    ShowDetailsEpisodesSection(episodes: episodes)
+                }
                 
-                ShowDetailsCastSection(contentState: viewModel.castContentState)
+                if let cast = viewModel.cast?.cast,
+                   !cast.isEmpty {
+                    ShowDetailsCastSection(cast: cast)
+                }
+                
+                if !viewModel.similarShows.isEmpty {
+                    ShowDetailsSimilarShowsSection(viewModel.similarShows, animationImageOrigin: $animationImageOrigin, animationFavoriteButtonOrigin: $animationFavoriteButtonOrigin, similarShowPrimaryInfo: $viewModel.similarShowPrimaryInfo)
+                }
+                
+                if viewModel.isLoadingEpisodes || viewModel.isLoadingCast {
+                    ProgressView()
+                        .tint(.white)
+                        .progressViewStyle(.circular)
+                }
             }
             .padding(.bottom, UIScreen.unsafeBottomPadding)
             .background(
@@ -201,7 +226,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
         ShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
                                 isVisible: .constant(true),
                                 source: .favorites,
-                                imageOrigin: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight))
+                        imageOrigin: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight), isRoot: true)
         .background(.white)
     }
 }

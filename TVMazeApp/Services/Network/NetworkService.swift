@@ -11,7 +11,7 @@ enum NetworkServiceError: Error {
     case invalidURL(String)
 }
 
-final class NetworkService {
+final class NetworkService: NetworkServiceProtocol {
     
     private let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
