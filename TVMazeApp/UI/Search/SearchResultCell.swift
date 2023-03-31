@@ -20,7 +20,6 @@ struct SearchResultCell: View {
                     .resizable()
                     .scaledToFill()
                     .frame(width: Self.width, height: Self.imageHeight)
-                    .animatablePoster(id: model.id, type: .searchResultCard)
                     .clipped()
                     .overlay(alignment: .topTrailing) {
                         RoundedRectangle(cornerRadius: 8)
@@ -37,6 +36,7 @@ struct SearchResultCell: View {
                 NoPosterView()
                     .frame(width: Self.width, height: Self.imageHeight)
             }
+            .animatableRect(id: model.id, type: .searchResultCard)
             
             VStack(alignment: .leading) {
                 Text(verbatim: model.title)
@@ -62,7 +62,7 @@ struct SearchResultCell: View {
         .overlay(alignment: .topTrailing) {
             FavoriteButton(favoritesService.binding(for: model.id))
                 .id(favoritesService.refreshToken ? 0 : 1)
-                .animatablePoster(id: model.id, type: .favoriteButton)
+                .animatableRect(id: model.id, type: .favoriteButton)
         }
     }
     

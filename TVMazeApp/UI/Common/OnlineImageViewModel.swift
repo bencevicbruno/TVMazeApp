@@ -9,13 +9,15 @@ import UIKit
 
 final class OnlineImageViewModel: ObservableObject {
     
-    @Published var state: ContentState = .loading
+    @Published var state: ContentState
     
     private let cacheService = CacheService.instance
     
     private static var immediateCache: [String: UIImage] = [:]
     
     init(_ imageURL: String?) {
+        self.state = .loading
+        
         guard let imageURL = imageURL else {
             state = .error
             return
@@ -34,6 +36,24 @@ final class OnlineImageViewModel: ObservableObject {
             } else {
                 self?.fetchImage(at: imageURL)
             }
+        }
+    }
+    
+    init(cached imageURL: String?) {
+        guard let imageURL = imageURL else {
+            state = .error
+            return
+        }
+        
+        if let image = Self.immediateCache[imageURL] {
+            self.state = .loaded(image)
+            return
+        }
+        
+        if let cachedImage = self.cacheService.getImage(for: imageURL) {
+            self.state = .loaded(cachedImage)
+        } else {
+            self.state = .error
         }
     }
     
@@ -75,7 +95,7 @@ private extension OnlineImageViewModel {
             }
             
             self.cacheService.saveImage(for: urlString, image)
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                 self?.state = .loaded(image)
                 Self.immediateCache[urlString] = image
             }

@@ -27,7 +27,7 @@ struct SimilarShowCard: View {
                     .scaledToFill()
                     .frame(width: Self.width, height: Self.imageHeight)
                     .clipped()
-                    .animatablePoster(id: model.id, type: .similarShowCard)
+                    .animatableRect(id: model.id, type: .similarShowCard)
                     .overlay(alignment: .topTrailing) {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(isFavorite ? Color.tvMazeYellow : .clear)
@@ -56,7 +56,7 @@ struct SimilarShowCard: View {
         .overlay(alignment: .topTrailing) {
             FavoriteButton($isFavorite)
                 .id(favoritesService.refreshToken ? 0 : 1)
-                .animatablePoster(id: model.id, type: .favoriteButton)
+                .animatableRect(id: model.id, type: .favoriteButton)
         }
     }
     

@@ -30,7 +30,6 @@ struct RecommendedShowCard: View {
                         .scaledToFill()
                         .frame(width: Self.width, height: Self.imageHeight)
                         .clipped()
-                        .animatablePoster(id: model.id, type: .recommendedShowCard)
                         .overlay(alignment: .topTrailing) {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(isFavorite ? Color.tvMazeYellow : .clear)
@@ -46,6 +45,7 @@ struct RecommendedShowCard: View {
                     NoPosterView()
                         .frame(width: Self.width, height: Self.imageHeight)
                 }
+                .animatableRect(id: model.id, type: .recommendedShowCard)
                 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(verbatim: model.title)
@@ -67,7 +67,7 @@ struct RecommendedShowCard: View {
             .overlay(alignment: .topTrailing) {
                 FavoriteButton($isFavorite)
                     .id(favoritesService.refreshToken ? 0 : 1)
-                    .animatablePoster(id: model.id, type: .favoriteButton)
+                    .animatableRect(id: model.id, type: .favoriteButton)
             }
             .allowsHitTesting(scaleInterpolator.interpolate(proxy.frame(in: .global).midX) == 1)
             .scaleEffect(x: scaleInterpolator.interpolate(proxy.frame(in: .global).midX), y: scaleInterpolator.interpolate(proxy.frame(in: .global).midX))

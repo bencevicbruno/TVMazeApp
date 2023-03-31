@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     
-    func animatablePoster(id: Int, type: AnimatableRectType) -> some View {
+    func animatableRect(id: Int, type: AnimatableRectType) -> some View {
         self.modifier(AnimatableRectModifier(id: id, type: type))
     }
     

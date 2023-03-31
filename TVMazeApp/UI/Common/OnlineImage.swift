@@ -23,6 +23,14 @@ struct OnlineImage<Content, Placeholder, Error>: View where Content: View, Place
         self._viewModel = .init(wrappedValue: .init(url))
     }
     
+    init(cached url: String?, content: @escaping (Image) -> Content, placeholder: () -> Placeholder, error: () -> Error) {
+        self.contentBuilder = content
+        self.placeholderBuilder = placeholder()
+        self.errorBuilder = error()
+        
+        self._viewModel = .init(wrappedValue: .init(cached: url))
+    }
+    
     var body: some View {
         switch viewModel.state {
         case .loading:

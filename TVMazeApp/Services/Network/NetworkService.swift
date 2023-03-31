@@ -32,9 +32,9 @@ final class NetworkService: NetworkServiceProtocol {
         
         let (data, _) = try await URLSession.shared.data(for: request)
         
-        print("===== INCOMING RESPONSE =====")
-        print("URL: \(urlString)")
-        print("Data: \(String(data: data, encoding: .utf8) ?? "None")")
+//        print("===== INCOMING RESPONSE =====")
+//        print("URL: \(urlString)")
+//        print("Data: \(String(data: data, encoding: .utf8) ?? "None")")
         
         return try JSONDecoder().decode(T.self, from: data)
     }

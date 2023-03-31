@@ -101,7 +101,7 @@ private extension ShowDetailsView {
                         .offset(to: (didAppear || favoriteButtonOrigin == nil) ? nil : favoriteButtonOrigin!)
                         .offset(y: didAppear ? 0 : navigationBarSize.height)
                         .opacity(favoriteButtonOrigin == nil ? (didAppear ? 1 : 0) : 1)
-                        
+                    
                 }
                 .padding(.horizontal, 24)
                 .frame(height: 50)
@@ -126,37 +126,57 @@ private extension ShowDetailsView {
     // MARK: Background Image
     
     var backgroundImage: some View {
-        Image(uiImage: viewModel.model.poster)
-            .resizable()
-            .scaledToFill()
-            .frame(width: didAppear ? UIScreen.width : imageOrigin.width, height: didAppear ? Self.imageHeight : imageOrigin.height)
-            .clipped()
-            .mask {
-                switch source {
-                case .recommended:
-                    RecommendedShowCard.imageMask
-                case .scheduled:
-                    ScheduledShowCard.imageMask
-                case .search:
-                    SearchResultCell.imageMask
-                case .favorites:
-                    FavoriteShowCard.imageMask
-                case .similar:
-                    SimilarShowCard.imageMask
+        OnlineImage(cached: viewModel.model.posterURL) { image in
+            image
+                .resizable()
+                .scaledToFill()
+                .frame(width: didAppear ? UIScreen.width : imageOrigin.width,
+                       height: didAppear ? Self.imageHeight : imageOrigin.height)
+                .clipped()
+                .overlay(alignment: .topTrailing) {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(isFavorite ? Color.tvMazeYellow : .clear)
+                        .frame(size: 40)
+                        .blur(radius: 12)
                 }
+        } placeholder: {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .tint(.white)
+                .frame(width: didAppear ? UIScreen.width : imageOrigin.width,
+                       height: didAppear ? Self.imageHeight : imageOrigin.height)
+        } error: {
+            NoPosterView()
+                .frame(width: didAppear ? UIScreen.width : imageOrigin.width,
+                       height: didAppear ? Self.imageHeight : imageOrigin.height)
+        }
+        .background(Color.tvMazeDarkGray)
+        .mask {
+            switch source {
+            case .recommended:
+                RecommendedShowCard.imageMask
+            case .scheduled:
+                ScheduledShowCard.imageMask
+            case .search:
+                SearchResultCell.imageMask
+            case .favorites:
+                FavoriteShowCard.imageMask
+            case .similar:
+                SimilarShowCard.imageMask
             }
-            .mask {
-                VStack(spacing: 0) {
-                    Color.black
-                        .frame(width: UIScreen.width)
-                    
-                    LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
-                        .frame(width: UIScreen.width, height: didAppear ? 40 : 0)
-                }
+        }
+        .mask {
+            VStack(spacing: 0) {
+                Color.black
+                    .frame(width: UIScreen.width)
+                
+                LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
+                    .frame(width: UIScreen.width, height: didAppear ? 40 : 0)
             }
-            .offset(to: didAppear ? nil : imageOrigin)
-            .edgesIgnoringSafeArea(.all)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }
+        .offset(to: didAppear ? nil : imageOrigin)
+        .edgesIgnoringSafeArea(.all)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
     
     // MARK: Show Details
@@ -224,8 +244,8 @@ struct ShowDetailsView_Previews: PreviewProvider {
     
     static var previews: some View {
         ShowDetailsView(model: .init(from: RecommendedShowModel.sample()),
-                                isVisible: .constant(true),
-                                source: .favorites,
+                        isVisible: .constant(true),
+                        source: .favorites,
                         imageOrigin: .init(x: 50, y: 50, width: RecommendedShowCard.width, height: RecommendedShowCard.imageHeight), isRoot: true)
         .background(.white)
     }

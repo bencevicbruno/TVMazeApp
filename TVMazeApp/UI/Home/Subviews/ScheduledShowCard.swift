@@ -19,7 +19,6 @@ struct ScheduledShowCard: View {
                     .scaledToFill()
                     .frame(size: Self.height)
                     .clipped()
-                    .animatablePoster(id: model.id, type: .scheduledShowCard)
             } placeholder: {
                 ProgressView()
                     .progressViewStyle(.circular)
@@ -29,6 +28,7 @@ struct ScheduledShowCard: View {
                 NoPosterView()
                     .frame(size: Self.height)
             }
+            .animatableRect(id: model.id, type: .scheduledShowCard)
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(verbatim: model.title)
