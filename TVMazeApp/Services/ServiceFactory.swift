@@ -9,7 +9,7 @@ import Foundation
 
 enum ServiceFactory {
     
-    static let networkService: NetworkServiceProtocol = NetworkService()
+    static let networkService: NetworkServiceProtocol = UnstableNetworkService()
     
     static let showsService: ShowsServiceProtocol = ShowsService()
 }

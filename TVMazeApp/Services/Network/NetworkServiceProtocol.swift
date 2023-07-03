@@ -9,5 +9,6 @@ import Foundation
 
 protocol NetworkServiceProtocol: AnyObject {
     
+    func fetchData(url urlString: String) async throws -> Data
     func fetchJSON<T>(url urlString: String) async throws -> T where T: Decodable
 }

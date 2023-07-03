@@ -104,6 +104,7 @@
 		8CDFAC9E299B8ED80075D777 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDFAC9D299B8ED80075D777 /* FavoritesViewModel.swift */; };
 		8CE54EBC29B2204B00BEC11B /* NoPosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE54EBB29B2204B00BEC11B /* NoPosterView.swift */; };
 		8CE54EBE29B2306C00BEC11B /* InterpolatorExamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE54EBD29B2306C00BEC11B /* InterpolatorExamples.swift */; };
+		8CE75C1E29D7066400445BA0 /* UnstableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE75C1D29D7066400445BA0 /* UnstableNetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -206,6 +207,7 @@
 		8CDFAC9D299B8ED80075D777 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		8CE54EBB29B2204B00BEC11B /* NoPosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoPosterView.swift; sourceTree = "<group>"; };
 		8CE54EBD29B2306C00BEC11B /* InterpolatorExamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpolatorExamples.swift; sourceTree = "<group>"; };
+		8CE75C1D29D7066400445BA0 /* UnstableNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnstableNetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -432,6 +434,7 @@
 				8C6A436A29A8D54D00D487DB /* NetworkService.swift */,
 				8CD6BF6429AF4D3F00469245 /* NetworkServiceProtocol.swift */,
 				8CD6BF6629AF4D5B00469245 /* SlowNetworkService.swift */,
+				8CE75C1D29D7066400445BA0 /* UnstableNetworkService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				8C0B9A2D29A3962D00490E8A /* TVMazeScrollView.swift in Sources */,
 				8CA605C8299FAFD700005244 /* CastMemberCell.swift in Sources */,
 				8C0B9A2629A38D4500490E8A /* View+LocationReader.swift in Sources */,
+				8CE75C1E29D7066400445BA0 /* UnstableNetworkService.swift in Sources */,
 				8C27F3B329994F3B008350B8 /* OffsetableScrollView.swift in Sources */,
 				8CA605A9299D139400005244 /* Int+.swift in Sources */,
 				8CD6BF6529AF4D3F00469245 /* NetworkServiceProtocol.swift in Sources */,

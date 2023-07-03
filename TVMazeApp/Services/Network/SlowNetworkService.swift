@@ -11,6 +11,12 @@ final class SlowNetworkService: NetworkServiceProtocol {
     
     private let networkService = NetworkService()
     
+    func fetchData(url urlString: String) async throws -> Data {
+        try await Task.sleep(for: .seconds(5))
+        
+        return try await networkService.fetchData(url: urlString)
+    }
+    
     func fetchJSON<T>(url urlString: String) async throws -> T where T : Decodable {
         try await Task.sleep(for: .seconds(5))
         
